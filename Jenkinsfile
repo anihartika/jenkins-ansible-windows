@@ -1,6 +1,6 @@
 pipeline {
     environment {
-    account          = "quickbooks2018"
+    account          = "azureaws"
     repo             = "jenkins-ansible-windows"
     
   }
@@ -12,7 +12,7 @@ pipeline {
     stage('SCM Checkout') {
     steps {
 
-      git branch: 'main', url: 'https://github.com/quickbooks2018/jenkins-ansible-windows.git'
+      git branch: 'main', url: 'https://github.com/azureaws/jenkins-ansible-windows.git'
         
         }
          }
