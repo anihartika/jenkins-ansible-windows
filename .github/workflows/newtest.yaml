@@ -15,7 +15,7 @@ jobs:
 
       - name: Install Ansible
         run: sudo apt-get update && sudo apt-get install -y ansible
-        - name: Install sshpass
+      - name: Install sshpass
         run: sudo apt install sshpass
 
       - name: Configure SSH key
