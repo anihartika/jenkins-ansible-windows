@@ -29,7 +29,7 @@ jobs:
           ssh-private-key: |
             ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Connect to Control node
-        run: ssh ubuntu@${{ secrets.SSHCTRL }} echo "Connected!"
+        run: ssh ubuntu@$3.84.53.104 echo "Connected!"
 
      
       - name: Run Ansible playbook
