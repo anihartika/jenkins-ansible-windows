@@ -29,7 +29,7 @@ jobs:
           ssh-private-key: |
             ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Connect to Windows
-        run: ssh Administrator@3.93.9.112 echo "Connected!"
+        run: ssh Administrator@3.84.53.104 echo "Connected!"
 
      
       - name: Run Ansible playbook
