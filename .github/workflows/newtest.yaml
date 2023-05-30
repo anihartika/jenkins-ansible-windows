@@ -34,4 +34,4 @@ jobs:
      
       - name: Run Ansible playbook
         run: |
-           ansible -i inventory -m win_ping win "whoami; uname -a" --become --become-user=root
+           ansible -i inventory -m win_ping win
