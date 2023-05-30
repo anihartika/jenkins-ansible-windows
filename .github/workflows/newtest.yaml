@@ -34,4 +34,3 @@ jobs:
       - name: Run Ansible playbook
         run: |
            ansible -i inventory -m win_ping win
-          //ansible-playbook -i inventory.yml playbook.yml
