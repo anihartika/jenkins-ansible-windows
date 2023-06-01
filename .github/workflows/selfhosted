@@ -1,4 +1,4 @@
-name: Ansible Windows
+name: Ansible Windows Updated
 
 on:
   push:
