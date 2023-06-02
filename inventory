@@ -5,7 +5,7 @@
 
 
 dev_server_1 ansible_host=44.201.118.189
-dev_server_2 ansible_host=3.85.34.105
+
 
 [win:vars]
 ansible_user=Administrator
@@ -16,11 +16,5 @@ ansible_ssh_common_args=-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/n
 ansible_ssh_retries=3
 ansible_become_method=runas
 
-[winnew:vars]
-ansible_user=Administrator
-ansible_password=r6VnDQ9fWWeCZMb6sTD%nmL=f4?wvvAX
-
 [win]
 dev_server_1
-[winnew]
-dev_server_2
