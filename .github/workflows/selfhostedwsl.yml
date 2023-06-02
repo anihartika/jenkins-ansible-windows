@@ -16,7 +16,6 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v2
       - name: Set up WSL1
-        shell: pwsh
         run: |
           Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
 
