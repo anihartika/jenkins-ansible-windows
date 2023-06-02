@@ -18,4 +18,4 @@ jobs:
 
       - name: Execute Ansible playbook
         run: |
-          wsl -e ansible-playbook windowsplaybook.yml
+          wsl -e ansible-playbook windowsplaybook.yaml
