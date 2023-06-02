@@ -1,4 +1,4 @@
-name: Run Playbook windows via selfhostedrunner
+name: Run Playbook windows via selfhostedrunner updated
 
 on:
   push:
