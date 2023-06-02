@@ -11,12 +11,19 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: setup python
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.9.0'
+          python-version: 3.8.0
+          architecture: x64
+        env:
+          RUNNER_TOOL_CACHE: /opt/hostedtoolcache  
+      - run: |
+          whoami
+          ls -l /opt/hostedtoolcache
+          python --version
 
       - name: Install Ansible
         run: |
