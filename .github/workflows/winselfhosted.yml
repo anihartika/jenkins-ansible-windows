@@ -1,0 +1,32 @@
+name: Run Ansible Playbook windows via selfhostedrunner
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  install:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+
+    - name: Install pip
+      run: |
+        python -m pip install --upgrade pip
+
+    - name: Install Ansible
+      run: |
+        pip install ansible
+
+    - name: Run Ansible Playbook
+      run: |
+        ansible-playbook windowsplaybook.yaml
