@@ -29,11 +29,15 @@ jobs:
           ssh-private-key: |
             ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Create and print required user variables
-        id: set_variable
-          winhost="${{ secrets.WIN_HOST }}"
-          winuser="${{ secrets.WIN_USER }}"
-          winpassword="${{ secrets.WIN_PASSWORD }}"
+      - name: Create required user variables
+        id: set_var
+        run: |
+           # Assign the secret value to a workflow variable
+           winhost="${{ secrets.WIN_HOST }}"
+           winuser= "${{ secrets.WIN_USER }}"
+           winpassword= "${{ secrets.WIN_PASSWORD }}"
+           
+      - name: Print the assigned variable
         run: |
           echo "The value of winhost is $winhost"
           
