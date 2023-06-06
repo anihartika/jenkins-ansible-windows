@@ -30,10 +30,13 @@ jobs:
             ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Create required user variables
-        run: |
-                echo "winhost=${{ secrets.WIN_HOST }}"
-                "winuser=${{ secrets.WIN_USER }}"
-                "winpassword=${{ secrets.WIN_PASSWORD}}" >> $GITHUB_ENV
+        env:
+                winhost: |
+                     ${{ secrets.WIN_HOST }}
+                winuser: |
+                     ${{ secrets.WIN_USER }}
+                winpassword: |
+                      ${{ secrets.WIN_PASSWORD }}
                 
       - name: Use declared variable
         run: |
