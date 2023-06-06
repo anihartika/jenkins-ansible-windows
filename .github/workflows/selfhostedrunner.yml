@@ -3,7 +3,7 @@ name: Ansible Windows Updated
 on:
   push:
     branches:
-      - ubuntutest
+      - main
 
 jobs:
   deploy:
