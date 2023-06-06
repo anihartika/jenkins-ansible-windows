@@ -29,7 +29,7 @@ jobs:
           ssh-private-key: |
             ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Set inventory variable
-        run: echo "$winhost= ${{ secrets.WIN_HOST }}" >> $GITHUB_ENV
+        run: echo "winhost= ${{ secrets.WIN_HOST }}" >> $GITHUB_ENV
 
       - name: Create inventory file
         run: |
