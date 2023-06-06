@@ -32,7 +32,6 @@ jobs:
       - name: Create required user variables
         id: set_var
         run: |
-           # Assign the secret value to a workflow variable
            winhost="${{ secrets.WIN_HOST }}"
            winuser= "${{ secrets.WIN_USER }}"
            winpassword= "${{ secrets.WIN_PASSWORD }}"
