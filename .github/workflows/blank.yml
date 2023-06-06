@@ -45,5 +45,5 @@ jobs:
 
       - name: Run Ansible playbook
         run: |
-           ansible -i inventory -m win_ping all
-           ansible-playbook -i inventory windowsplaybook.yaml
+           ansible -i inventory.ini -m win_ping all
+           ansible-playbook -i inventory.ini windowsplaybook.yaml
