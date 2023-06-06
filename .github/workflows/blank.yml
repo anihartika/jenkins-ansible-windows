@@ -30,13 +30,10 @@ jobs:
             ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Create required user variables
-        with:
-                winhost: |
-                     ${{ secrets.WIN_HOST }}
-                winuser: |
-                     ${{ secrets.WIN_USER }}
-                winpassword: |
-                      ${{ secrets.WIN_PASSWORD }}
+        env:
+            winhost: ${{ secrets.WIN_HOST }}
+            winuser: ${{ secrets.WIN_USER }}
+            winpassword: ${{ secrets.WIN_PASSWORD }}
                 
       - name: Use declared variable
         run: |
