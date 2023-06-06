@@ -31,9 +31,9 @@ jobs:
 
       - name: Create and print required user variables
         env:
-            winhost: ${{ secrets.WIN_HOST }}
-            winuser: ${{ secrets.WIN_USER }}
-            winpassword: ${{ secrets.WIN_PASSWORD }}
+            winhost: echo ${{ secrets.WIN_HOST}}
+            winuser: echo ${{ secrets.WIN_USER }}
+            winpassword: echo ${{ secrets.WIN_PASSWORD }}
         run: |
             echo $winhost
             echo $winuser
