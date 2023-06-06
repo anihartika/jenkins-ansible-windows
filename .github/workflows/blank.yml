@@ -32,11 +32,13 @@ jobs:
             ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Create and print required user variables
-        id: set-variable
+        env:
+          winhost: ${{ secrets.WIN_HOST }}
+          winuser: ${{ secrets.WIN_USER }}
+          winpassword: ${{ secrets.WIN_PASSWORD }}
         run: |
-          echo "::set-env name=winhost::${{ secrets.WIN_HOST }}"
-          echo "::set-env name=winuser::${{ secrets.WIN_USER }}"
-          echo "::set-env name=winpassword::${{ secrets.WIN_PASSWORD }}"
+          echo "The value of winhost is $winhost"
+          
                 
       - name: Use declared variable
         run: |
