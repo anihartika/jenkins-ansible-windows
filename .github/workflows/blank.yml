@@ -29,11 +29,15 @@ jobs:
           ssh-private-key: |
             ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Create required user variables
+      - name: Create and print required user variables
         env:
             winhost: ${{ secrets.WIN_HOST }}
             winuser: ${{ secrets.WIN_USER }}
             winpassword: ${{ secrets.WIN_PASSWORD }}
+        run: |
+            echo $winhost
+            echo $winuser
+            echo $winpassword
                 
       - name: Use declared variable
         run: |
