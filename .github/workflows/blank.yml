@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+
 jobs:
   deploy:
     runs-on: self-hosted
@@ -27,10 +28,10 @@ jobs:
         with:
           ssh-private-key: |
             ${{ secrets.SSH_PRIVATE_KEY }}
-  - name: Set inventory variable
+      - name: Set inventory variable
         run: echo "$winhost= ${{ secrets.WIN_HOST}}" >> $GITHUB_ENV
 
-- name: Create inventory file
+      - name: Create inventory file
         run: |
           echo "$winhost ansible_user=${{ secrets.WIN_USER}} ansible_password=${{ secrets.WIN_USER}}" > inventory.ini
           echo "ansible_connection=ssh
@@ -38,8 +39,8 @@ jobs:
                 ansible_ssh_common_args=-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
                 ansible_ssh_retries=3
                 ansible_become_method=runas" >> inventory.ini
-- name: Print inventory
-      run: |
+      - name: Print inventory
+        run: |
           cat inventory.ini
 
       - name: Run Ansible playbook
