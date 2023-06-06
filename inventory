@@ -3,12 +3,12 @@
 ######
 # ansible win  -m win_ping
 
-dev_server_1 ansible_host=${{ secrets.WIN_HOST }}
+dev_server_1 ansible_host="${{ secrets.WIN_HOST }}"
 
 
 [win:vars]
-ansible_user=${{ secrets.WIN_USER }}
-ansible_password=${{ secrets.WIN_PASSWORD }}
+ansible_user="${{ secrets.WIN_USER }}"
+ansible_password="${{ secrets.WIN_PASSWORD }}"
 ansible_connection=ssh
 ansible_shell_type=cmd
 ansible_ssh_common_args=-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
