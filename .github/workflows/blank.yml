@@ -29,10 +29,9 @@ jobs:
           ssh-private-key: |
             ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Create inventory file
+      - name: Create required user variables
         run: |
-          
-          echo "winhost=${{ secrets.WIN_HOST }}"
+                echo "winhost=${{ secrets.WIN_HOST }}"
                 "winuser=${{ secrets.WIN_USER }}"
                 "winpassword=${{ secrets.WIN_PASSWORD}}" >> $GITHUB_ENV
                 
