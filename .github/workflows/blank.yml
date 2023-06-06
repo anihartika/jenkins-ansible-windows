@@ -33,8 +33,12 @@ jobs:
 
       - name: Create inventory file
         run: |
-          echo "$winhost ansible_user=${{ secrets.WIN_USER }} ansible_password=${{ secrets.WIN_PASSWORD}}" > inventory.ini
-          echo "ansible_connection=ssh
+          echo "[win]
+                dev_server ansible_host=$winhost 
+                [win:vars]
+                ansible_user=${{ secrets.WIN_USER }} 
+                ansible_password=${{ secrets.WIN_PASSWORD}}" > inventory.ini
+                echo "ansible_connection=ssh
                 ansible_shell_type=cmd
                 ansible_ssh_common_args=-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
                 ansible_ssh_retries=3
