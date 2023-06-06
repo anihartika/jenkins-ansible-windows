@@ -29,11 +29,11 @@ jobs:
           ssh-private-key: |
             ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Set inventory variable
-        run: echo "$winhost= ${{ secrets.WIN_HOST}}" >> $GITHUB_ENV
+        run: echo "$winhost= ${{ secrets.WIN_HOST }}" >> $GITHUB_ENV
 
       - name: Create inventory file
         run: |
-          echo "$winhost ansible_user=${{ secrets.WIN_USER}} ansible_password=${{ secrets.WIN_USER}}" > inventory.ini
+          echo "$winhost ansible_user=${{ secrets.WIN_USER }} ansible_password=${{ secrets.WIN_PASSWORD}}" > inventory.ini
           echo "ansible_connection=ssh
                 ansible_shell_type=cmd
                 ansible_ssh_common_args=-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
