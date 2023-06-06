@@ -30,10 +30,15 @@ jobs:
             ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Create required user variables
+        with: # Set the secret as an input
+           winhost: ${{ secrets.WIN_HOST }}
+           winuser: ${{ secrets.WIN_USER }}
+           winpassword: ${{ secrets.WIN_PASSWORD }}
         env:
            winhost: ${{ secrets.WIN_HOST }}
            winuser: ${{ secrets.WIN_USER }}
            winpassword: ${{ secrets.WIN_PASSWORD }}
+      - name: Print the windows host
         run: |
           echo "The value of winhost is $winhost"
            
