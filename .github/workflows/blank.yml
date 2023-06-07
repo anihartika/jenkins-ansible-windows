@@ -34,7 +34,7 @@ jobs:
       - name: Use declared variable
         run: |
                 echo "[win]
-                ansible_host=$${{ vars.WIN_HOST }}
+                ansible_host=${{ vars.WIN_HOST }}
                 [win:vars]
                 ansible_user=${{ secrets.WIN_USER }}
                 ansible_password=${{ secrets.WIN_PASSWORD }}" > inventory.ini
