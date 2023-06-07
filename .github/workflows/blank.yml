@@ -36,8 +36,8 @@ jobs:
                 echo "[win]
                 ${{ vars.WIN_HOST }}
                 [win:vars]
-                ansible_user=${{ secrets.WIN_USER }}
-                ansible_password=${{ secrets.WIN_PASSWORD }}" > inventory.ini
+                ansible_user=${{ vars.WIN_USER }}
+                ansible_password=${{ vars.WIN_PASSWORD }}" > inventory.ini
                 
                 echo "ansible_connection=ssh
                 ansible_shell_type=cmd
