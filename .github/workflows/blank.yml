@@ -32,11 +32,9 @@ jobs:
            
            
       - name: Configure inventory
-        env:
-         WIN_HOST: 54.210.122.0
         run: |
                 echo "[win]
-                {{ env.WIN_HOST }}
+                54.210.122.0
                 [win:vars]
                 ansible_user=${{ secrets.WIN_USER }}
                 ansible_password=${{ secrets.WIN_PASSWORD }}" > inventory.ini
