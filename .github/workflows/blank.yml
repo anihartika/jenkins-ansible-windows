@@ -32,7 +32,7 @@ jobs:
 
       - name: Create required user variables
         env:
-          Winhost: ${{ secrets.WIN_HOST }}
+          Winhost: "54.210.122.0"
           winuser: ${{ secrets.WIN_USER }}
           winpassword: ${{ secrets.WIN_PASSWORD }}
         run: |
