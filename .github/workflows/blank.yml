@@ -8,6 +8,8 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
+env:
+      WIN_HOST: 54.210.122.0
 
     steps:
       - name: Checkout code
@@ -31,7 +33,7 @@ jobs:
 
       - name: Create required user variables
         env:
-           winhost: ${{ secrets.WIN_HOST }}
+           winhost: ${{ env.WIN_HOST }}
            winuser: ${{ secrets.WIN_USER }}
            winpassword: ${{ secrets.WIN_PASSWORD }}
         run: |
