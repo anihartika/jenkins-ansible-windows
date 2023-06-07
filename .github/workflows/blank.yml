@@ -35,7 +35,7 @@ jobs:
            winuser: ${{ secrets.WIN_USER }}
            winpassword: ${{ secrets.WIN_PASSWORD }}
         run: |
-          echo "The value of winhost is $winhost"
+          echo "The value of winhost is ${{env.winhost}}"
            
            
       - name: Use declared variable
