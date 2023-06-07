@@ -34,11 +34,10 @@ jobs:
            winhost: ${{ secrets.WIN_HOST }}
            winuser: ${{ secrets.WIN_USER }}
            winpassword: ${{ secrets.WIN_PASSWORD }}
-        env:
+       env:
            winhost: ${{ secrets.WIN_HOST }}
            winuser: ${{ secrets.WIN_USER }}
            winpassword: ${{ secrets.WIN_PASSWORD }}
-      - name: Print the windows host
         run: |
           echo "The value of winhost is $winhost"
            
