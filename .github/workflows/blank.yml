@@ -8,8 +8,8 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
- 
-     
+    environment: windows         
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -34,7 +34,7 @@ jobs:
       - name: Configure inventory
         run: |
                 echo "[win]
-                54.210.122.0
+                ${{ vars.WIN_HOST }}
                 [win:vars]
                 ansible_user=${{ secrets.WIN_USER }}
                 ansible_password=${{ secrets.WIN_PASSWORD }}" > inventory.ini
