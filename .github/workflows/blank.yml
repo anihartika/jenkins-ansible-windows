@@ -1,4 +1,4 @@
-name: Ansible Windows Updated test
+name: Ansible Windows Updated Test
 
 on:
   push:
