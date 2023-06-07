@@ -29,22 +29,12 @@ jobs:
         with:
           ssh-private-key: |
             ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Create required user variables
-        env:
-          winuser: ${{ secrets.WIN_USER }}
-          winpassword: ${{ secrets.WIN_PASSWORD }}
-        run: |
-          cat > Winhost <<EOF
-          ${{ secrets.WIN_HOST }}
-          EOF
-          echo "The value of winhost is $Winhost""
            
            
       - name: Use declared variable
         run: |
                 echo "[win]
-                ansible_host=$Winhost
+                ansible_host=54.210.122.0
                 [win:vars]
                 ansible_user=${{ secrets.WIN_USER }}
                 ansible_password=${{ secrets.WIN_PASSWORD }}" > inventory.ini
