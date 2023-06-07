@@ -35,16 +35,16 @@ jobs:
            winuser: ${{ secrets.WIN_USER }}
            winpassword: ${{ secrets.WIN_PASSWORD }}
         run: |
-          echo "The value of winhost is ${{env.winhost}}"
+          echo "The value of winhost is ${{ secrets.WIN_HOST }}"
            
            
       - name: Use declared variable
         run: |
                 echo "[win]
-                ansible_host=$winhost
+                ansible_host=${{ secrets.WIN_HOST }}
                 [win:vars]
-                ansible_user=$winuser
-                ansible_password=$winpassword" > inventory.ini
+                ansible_user=${{ secrets.WIN_USER }}
+                ansible_password=${{ secrets.WIN_PASSWORD }}" > inventory.ini
                 
                 echo "ansible_connection=ssh
                 ansible_shell_type=cmd
