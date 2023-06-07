@@ -32,12 +32,12 @@ jobs:
 
       - name: Create required user variables
         env:
-          cat > Winhost <<EOF
-          ${{ secrets.WIN_HOST }}
-          EOF
           winuser: ${{ secrets.WIN_USER }}
           winpassword: ${{ secrets.WIN_PASSWORD }}
         run: |
+          cat > Winhost <<EOF
+          ${{ secrets.WIN_HOST }}
+          EOF
           echo "The value of winhost is $Winhost""
            
            
