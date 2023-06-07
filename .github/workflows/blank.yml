@@ -9,8 +9,8 @@ jobs:
   deploy:
     runs-on: self-hosted
     env:
-      WINHOST: 54.210.122.0
-      run: echo "The Winhowshost passed is:${{env.WINHOST}}"
+      WINHOST: ${{ secrets.WIN_HOST }}
+      run: echo "The Winhowshost is:${{env.WINHOST}}"
      
     steps:
       - name: Checkout code
