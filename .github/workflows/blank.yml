@@ -32,17 +32,17 @@ jobs:
 
       - name: Create required user variables
         env:
-          Winhost: "54.210.122.0"
+          Winhost: ${{ secrets.WIN_HOST}}
           winuser: ${{ secrets.WIN_USER }}
           winpassword: ${{ secrets.WIN_PASSWORD }}
         run: |
-          echo "The value of winhost is ${{ env.Winhost }}""
+          echo "The value of winhost is $Winhost""
            
            
       - name: Use declared variable
         run: |
                 echo "[win]
-                ansible_host=${{ env.Winhost }}
+                ansible_host=$Winhost
                 [win:vars]
                 ansible_user=${{ secrets.WIN_USER }}
                 ansible_password=${{ secrets.WIN_PASSWORD }}" > inventory.ini
