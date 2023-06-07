@@ -8,9 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-    env:
-      WINHOST: ${{ secrets.WIN_HOST }}
-      run: echo "The Winhowshost is:${{env.WINHOST}}"
+ 
      
     steps:
       - name: Checkout code
@@ -34,17 +32,17 @@ jobs:
 
       - name: Create required user variables
         env:
-           winhost: ${{env.WINHOST}}
-           winuser: ${{ secrets.WIN_USER }}
-           winpassword: ${{ secrets.WIN_PASSWORD }}
+          Winhost: ${{ secrets.WIN_HOST }}
+          winuser: ${{ secrets.WIN_USER }}
+          winpassword: ${{ secrets.WIN_PASSWORD }}
         run: |
-          echo "The value of winhost is $winhost"
+          echo "The value of winhost is ${{ env.Winhost }}""
            
            
       - name: Use declared variable
         run: |
                 echo "[win]
-                ansible_host=${{ secrets.WIN_HOST }}
+                ansible_host=${{ env.Winhost }}
                 [win:vars]
                 ansible_user=${{ secrets.WIN_USER }}
                 ansible_password=${{ secrets.WIN_PASSWORD }}" > inventory.ini
