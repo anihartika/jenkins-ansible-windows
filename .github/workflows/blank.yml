@@ -8,10 +8,12 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-env:
+  env:
       WIN_HOST: 54.210.122.0
+  run: |
+      echo "Assigning winhost value $WIN_HOST"
 
-    steps:
+  steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -37,7 +39,7 @@ env:
            winuser: ${{ secrets.WIN_USER }}
            winpassword: ${{ secrets.WIN_PASSWORD }}
         run: |
-          echo "The value of winhost is ${{ secrets.WIN_HOST }}"
+          echo "The value of winhost is $winhost"
            
            
       - name: Use declared variable
