@@ -32,7 +32,9 @@ jobs:
 
       - name: Create required user variables
         env:
-          Winhost: ${{ secrets.WIN_HOST}}
+          cat > Winhost <<EOF
+          ${{ secrets.WIN_HOST }}
+          EOF
           winuser: ${{ secrets.WIN_USER }}
           winpassword: ${{ secrets.WIN_PASSWORD }}
         run: |
