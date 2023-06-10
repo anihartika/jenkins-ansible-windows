@@ -5,7 +5,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted      
+    runs-on: self-hosted    
     
     steps:
       - name: Checkout code
@@ -13,11 +13,7 @@ jobs:
 
       - name: Install python and python pip
         run: sudo apt-get install python3 -y && sudo apt-get install python3-pip -y
-      
-      - name: Install Ansible
-        run: sudo apt-get update && sudo apt-get install -y ansible
-
-   
+         
       - name: Install boto3 library
         run: sudo pip3 install boto3
 
@@ -46,7 +42,7 @@ jobs:
       - name: Setup ansible configuration file with the required inventory
         run: |
           echo "[defaults]
-          enable_plugins = aws_ec2" >/etc/ansible/ansible.cfg
+          enable_plugins = aws_ec2" > /etc/ansible/ansible.cfg
           
       - name: Test the dynamic inventory configuration
         run: |
