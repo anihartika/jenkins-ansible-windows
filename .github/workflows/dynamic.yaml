@@ -21,9 +21,6 @@ jobs:
       - name: Install boto3 library
         run: sudo apt-get install python-boto3
 
-      - name: Install sshpass
-        run: sudo apt install sshpass
-
       - name: Configure SSH key
         run: |
           echo "$SSH_PRIVATE_KEY" > ssh_private_key
@@ -55,3 +52,7 @@ jobs:
       - name: Test the dynamic inventory configuration
         run: |
           ansible-inventory --graph -i inventory_aws_ec2.yml
+          ansible all -m ping
+          
+          
+        
