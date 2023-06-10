@@ -1,0 +1,54 @@
+name: Ansible Windows Updated Test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    environment: windows         
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Ansible
+        run: sudo apt-get update && sudo apt-get install -y ansible
+      - name: Install sshpass
+        run: sudo apt install sshpass
+
+      - name: Configure SSH key
+        run: |
+          echo "$SSH_PRIVATE_KEY" > ssh_private_key
+          chmod 600 ssh_private_key
+
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.5.1
+        with:
+          ssh-private-key: |
+            ${{ secrets.SSH_PRIVATE_KEY }}
+           
+           
+      - name: Configure inventory
+        run: |
+                echo "[win]
+                ${{ vars.WIN_HOST }}
+                [win:vars]
+                ansible_user=${{ secrets.WIN_USER }}
+                ansible_password=${{ secrets.WIN_PASSWORD }}" > inventory.ini
+                
+                echo "ansible_connection=ssh
+                ansible_shell_type=cmd
+                ansible_ssh_common_args=-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+                ansible_ssh_retries=3
+                ansible_become_method=runas" >> inventory.ini
+      - name: Print inventory
+        run: |
+          cat inventory.ini
+
+      - name: Run Ansible playbook
+        run: |
+           ansible -i inventory.ini -m win_ping all
+           ansible-playbook -i inventory.ini windowsplaybook.yaml
