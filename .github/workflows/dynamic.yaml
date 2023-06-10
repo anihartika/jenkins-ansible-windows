@@ -45,7 +45,6 @@ jobs:
                         ansible_host: 44.201.169.219" > inventory_aws_ec2.yaml
       - name: Setup ansible configuration file with the required inventory
         run: |
-          sudo mkdir /etc/ansible
           touch /etc/ansible/ansible.cfg
           echo "[defaults]
           enable_plugins = aws_ec2" >/etc/ansible/ansible.cfg
