@@ -15,11 +15,11 @@ jobs:
         run: sudo apt-get install python3 -y && sudo apt-get install python3-pip -y
       
       - name: Install Ansible
-        run: sudo apt-get update && sudo apt-get install software-properties-common && sudo apt-add-repository --yes --update ppa:ansible/ansible&&sudo apt-get install -y ansible
+        run: sudo apt-get update && sudo apt-get install -y ansible
 
    
       - name: Install boto3 library
-        run: sudo apt-get install python-boto3
+        run: sudo pip3 install boto3
 
       - name: Configure SSH key
         run: |
