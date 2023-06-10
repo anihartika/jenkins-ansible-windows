@@ -34,9 +34,7 @@ jobs:
 
       - name: Configure the inventory
         run: |
-                sudo mkdir -p /opt/ansible/inventory
-                cd /opt/ansible/inventory
-                echo "plugin: aws_ec2
+                  echo "plugin: aws_ec2
                       regions:
                         - "us-east-1"keyed_groups:
                         - key: tags.Name
@@ -44,7 +42,7 @@ jobs:
                       filters:
                         instance-state-name : running
                       compose:
-                        ansible_host: 44.201.169.219" >inventory_aws_ec2.yaml
+                        ansible_host: 44.201.169.219" > inventory_aws_ec2.yaml
       - name: Setup ansible configuration file with the required inventory
         run: |
           sed -i '/defaults/a enable_plugins = aws_ec2' /etc/ansible/ansible.cfg
