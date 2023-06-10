@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - ubuntutest
+      - main
 
 jobs:
   deploy:
