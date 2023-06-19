@@ -28,11 +28,19 @@ jobs:
         with:
           ssh-private-key: |
             ${{ secrets.SSH_PRIVATE_KEY }}
-      - name: Print inventiry
+      - name: Generate host file for dynamic inventiry
         run: |
-          cat inventory
+          cd /etc/ansible
+          sudo sh host-gen.sh
+          #Check if inventory is generated 
+           if [ -f inventory.ini]; then
+            echo "Inventory generated"
+            cat inventory.ini
+          else
+            echo "Inventory File not found!"
+          fi
 
       - name: Run Ansible playbook
         run: |
-           ansible -i inventory -m win_ping win
-           ansible-playbook -i inventory windowsplaybook.yaml
+           ansible -i inventory.ini -m win_ping win
+           ansible-playbook -i inventory.ini windowsplaybook.yaml
