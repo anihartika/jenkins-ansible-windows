@@ -29,13 +29,9 @@ jobs:
           cd /etc/ansible
           sudo chmod +x inventory.sh
           sudo sh inventory.sh
-          #Check if inventory is generated 
-           if [ -f inventory.ini]; then
-            echo "Inventory generated"
-            cat inventory.ini
-          else
-            echo "Inventory File not found!"
-          fi
+          #Check  inventory is generated  
+          cat inventory.ini
+ 
 
       - name: Run Ansible playbook
         run: |
