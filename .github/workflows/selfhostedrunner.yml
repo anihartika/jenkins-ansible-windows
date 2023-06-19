@@ -27,6 +27,7 @@ jobs:
       - name: Generate host file for dynamic inventory
         run: |
           cd /etc/ansible
+          sudo chmod +x inventory-ge.sh
           sudo sh inventory-ge.sh
           #Check if inventory is generated 
            if [ -f inventory.ini]; then
