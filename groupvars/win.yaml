@@ -1,0 +1,13 @@
+---
+
+ansible_user: Administrator
+
+ansible_password: 1NdO@;wi0R@SvcjZ)$(EY.vqCH1Qvwi0
+
+ansible_connection: winrm
+
+ansible_winrm_server_cert_validation: ignore
+
+ansible_winrm_transport: ntlm
+
+ansible_winrm_port: 5986
