@@ -29,7 +29,7 @@ jobs:
           cd /etc/ansible
           sudo chmod +x inventory.sh
           sudo sh inventory.sh
-          #Check  inventory is generated  
+          #Print inventory
           cat inventory.ini
  
 
