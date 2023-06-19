@@ -13,10 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Ansible
-        run: sudo apt-get update && sudo apt-get install -y ansible
-      - name: Install sshpass
-        run: sudo apt install sshpass
 
       - name: Configure SSH key
         run: |
@@ -28,7 +24,7 @@ jobs:
         with:
           ssh-private-key: |
             ${{ secrets.SSH_PRIVATE_KEY }}
-      - name: Generate host file for dynamic inventiry
+      - name: Generate host file for dynamic inventory
         run: |
           cd /etc/ansible
           sudo sh host-gen.sh
