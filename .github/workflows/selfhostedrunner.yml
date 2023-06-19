@@ -1,4 +1,4 @@
-name: Ansible Windows Playbook
+name: Ansible Windows Playbook Updated
 
 on:
   push:
