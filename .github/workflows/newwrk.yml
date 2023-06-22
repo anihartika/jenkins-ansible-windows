@@ -97,11 +97,12 @@ jobs:
         run: |
            ansible all --list-hosts
            
+           
       - name: Generate host file for dynamic inventory
         run: |
           cd /etc/ansible
-          sudo chmod +x inventory.sh
-          sudo sh inventory.sh
+          sudo chmod +x inventoryge.sh
+          sudo sh inventoryge.sh
           #Print inventory
           cat inventory.ini
  
