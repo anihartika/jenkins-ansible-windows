@@ -1,4 +1,4 @@
-name: Test Ansible Play new
+name: Test Ansible Play Updated
 
 on:
   push:
