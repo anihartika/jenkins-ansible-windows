@@ -53,7 +53,17 @@ jobs:
         run: |
            sudo apt-get update && sudo apt-get install python3-pip -y
            sudo apt-get install python3-winrm -y && sudo sudo pip3 install boto3
-      - name: Check for dynamic inventory
+      - name: Check for dynamic inventory directory
+        run: |
+           if [ -d /opt/ansible/inventory]; then
+            echo "Directory exists"
+            echo "::set-output name=directory_exists::true"
+          else
+            echo "Directory does not exist"
+            echo "::set-output name=directory_exists::false"
+          fi
+        - name: Set the dynamic inventory directory and check inventory
+          if: steps.check_file.outputs.file_exists == 'false'
         run: |
            sudo mkdir -p /opt/ansible/inventory
            cd /opt/ansible/inventory
@@ -65,7 +75,7 @@ jobs:
                 echo "Dynamic inventory needs to be setup"
                 echo "::set-output name=file_exists::false"
              fi
-      - name: Setup dynamic inventoty
+      - name: Setup dynamic inventory
         if: steps.check_file.outputs.file_exists == 'false'
         run: |
            echo "plugin: aws_ec2
