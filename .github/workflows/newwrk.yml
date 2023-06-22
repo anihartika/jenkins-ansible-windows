@@ -67,5 +67,5 @@ jobs:
         run: |
            echo "[defaults]
            enable_plugins = aws_ec2
-           inventory      = /opt/ansible/inventory/aws_ec2.yaml" | sudo tee -a /etc/ansible/ansible.cfg
-           cat ansible.cfg
+           inventory = /opt/ansible/inventory/aws_ec2.yaml" | sudo tee -a /etc/ansible/ansible.cfg
+           cat /etc/ansible/ansible.cfg
