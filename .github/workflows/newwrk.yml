@@ -96,11 +96,13 @@ jobs:
       - name: Check the dynamic inventory 
         run: |
            ansible all --list-hosts
+         
            
            
       - name: Generate host file for dynamic inventory
         run: |
           cd /etc/ansible
+          sudo cp inventoryge.sh .
           sudo chmod +x inventoryge.sh
           sudo sh inventoryge.sh
           #Print inventory
