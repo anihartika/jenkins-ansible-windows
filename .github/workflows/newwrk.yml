@@ -69,13 +69,13 @@ jobs:
                       regions:
                         - "us-east-1"
                       keyed_groups:
-                       - key: tags.Name
+                     - key: tags.Name
                       filters:
                         instance-state-name : running
                         tag:type: mywinnode
                      compose:
                        ansible_host: public_ip_address" | sudo tee -a aws_ec2.yaml
-            fi
+             fi
                 
       - name: Check Ansible Configuration and set it accordingly
         id: check_string
