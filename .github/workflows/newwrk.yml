@@ -53,32 +53,48 @@ jobs:
         run: |
            sudo apt-get update && sudo apt-get install python3-pip -y
            sudo apt-get install python3-winrm -y && sudo sudo pip3 install boto3
-      - name: Setup dynamic inventory
+      - name: Check for dynamic inventory
         run: |
            sudo mkdir -p /opt/ansible/inventory
            cd /opt/ansible/inventory
-           myinventory=$(cat aws_ec2.yaml)
-           if grep -q "plugin"
-             echo "Inventory already exists"
-           else
+             - name: Check if file exists
+              if [ -f aws_ec2.yaml]; then
+                echo "Dynamic inventory setup"
+                echo "::set-output name=file_exists::true"
+             else
+                echo "Dynamic inventory needs to be setup"
+                echo "::set-output name=file_exists::false"
+             fi
+      - name: Setup dynamic inventoty
+        if: steps.check_file.outputs.file_exists == 'false'
+        run: |
            echo "plugin: aws_ec2
                  regions:
                    - "us-east-1"
                  keyed_groups:
                    - key: tags.Name
-                filters:
+                 filters:
                    instance-state-name : running
                    tag:type: mywinnode
-                compose:
+                 compose:
                    ansible_host: public_ip_address"| sudo tee -a aws_ec2.yaml
-                   
-           fi
                 cat aws_ec2.yaml
-      - name: Setup Ansible configuration
+                
+      - name: Check Ansible Configuration
+        id: check_string
         run: |
-           if grep -q "[defaults]"
-            echo "Dynamic inventory defined in Ansible Config"
-           else
+          if grep -q "inventory" /etc/ansible/ansible.cfg; then
+            echo "Dynamic inventory defined"
+            echo "::set-output name=string_found::true"
+          else
+            echo "Dynamic inventory not defined in ansible configuration"
+            echo "::set-output name=string_found::false"
+          fi
+                
+                
+      - name: Define Dynamic inventory configuration
+        if: steps.check_file.outputs.file_exists == 'false'
+        run: |
            echo "[defaults]
            enable_plugins = aws_ec2
            inventory = /opt/ansible/inventory/aws_ec2.yaml" | sudo tee -a /etc/ansible/ansible.cfg
@@ -88,20 +104,3 @@ jobs:
       - name: Check the dynamic inventory 
         run: |
            ansible all --list-hosts
-           
-      - name: Generate host file for dynamic inventory
-        run: |
-          cd /etc/ansible
-          sudo chmod +x inventoryge.sh
-          sudo sh inventoryge.sh
-          #Print inventory
-          cat inventory.ini
- 
-
-      - name: Check connectivity
-        run: |
-           ansible -i /etc/ansible/inventory.ini -m win_ping win
-           
-      - name: Run Ansible playbook
-        run: |
-           ansible-playbook -i /etc/ansible/inventory.ini windowsplaybook.yaml
