@@ -32,8 +32,14 @@ jobs:
           sudo apt-get update && sudo apt-get install software-properties-common -y && sudo apt-add-repository --yes --update ppa:ansible/ansible
      
       - name: Install  Ansible and Check version
+        id: check_ansible
         run: |
-          sudo apt install ansible -y && ansible --version
+          ansible --version || echo "::set-output name=ansible_installed::false"
+      - name: Install Ansible
+        if: steps.check_ansible.outputs.ansible_installed == 'false'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ansible
           
       - name: Install Python
         run: |
