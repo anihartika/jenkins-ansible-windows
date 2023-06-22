@@ -51,6 +51,9 @@ jobs:
         run: |
            sudo mkdir -p /opt/ansible/inventory
            cd /opt/ansible/inventory
+           if grep -q "plugin"
+             echo "Inventory already exists"
+           else
            echo "plugin: aws_ec2
                  regions:
                    - "us-east-1"
@@ -64,6 +67,9 @@ jobs:
                 cat aws_ec2.yaml
       - name: Setup Ansible configuration
         run: |
+           if grep -q "[defaults]"
+            echo "Dynamic inventory defined in Ansible Config"
+           else
            echo "[defaults]
            enable_plugins = aws_ec2
            inventory = /opt/ansible/inventory/aws_ec2.yaml" | sudo tee -a /etc/ansible/ansible.cfg
