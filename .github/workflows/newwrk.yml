@@ -61,11 +61,11 @@ jobs:
              instance-state-name : running
              tag:type: mywinnode
              compose:
-                ansible_host: public_ip_address" > sudo aws_ec2.yaml
+                ansible_host: public_ip_address" >aws_ec2.yaml
               cat aws_ec2.yaml
       - name: Setup Ansible configuration
         run: |
            echo "[defaults]
            enable_plugins = aws_ec2
-           inventory      = /opt/ansible/inventory/aws_ec2.yaml" > sudo /etc/ansible/ansible.cfg
+           inventory      = /opt/ansible/inventory/aws_ec2.yaml" > /etc/ansible/ansible.cfg
            cat ansible.cfg
