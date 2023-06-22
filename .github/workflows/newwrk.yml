@@ -116,8 +116,7 @@ jobs:
           echo "Inventory file generated: $inventory_file"  
           else
           echo "Hosts file not found: $hosts_file"
-          fi
-          echo "This is a dynamically created shell script"" |sudo tee -a hostgen.sh 
+          fi" | sudo tee -a hostgen.sh 
            
       - name: Generate host file for dynamic inventory
         run: |
