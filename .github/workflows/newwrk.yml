@@ -1,0 +1,39 @@
+name: Install Ansible
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Add Repo Ansible
+        run: |
+          sudo apt-get update && sudo apt install software-properties-common && sudo apt-add-repository --yes --update ppa:ansible/ansible
+      - name: Install  Ansible and Check version
+        run: |
+          sudo apt install ansible -y && ansible --version
+          
+      - name: Install Python
+        run: |
+          if ! command -v python3 &> /dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y python3
+          fi
+          
+      - name: Install Python Pip,Boto3 and other dependencies
+        run: |
+           python3 --version
+           sudo apt-get install python3-pip -y
+           sudo apt-get install pywinrm
+           sudo apt-get install python-boto3
+          
