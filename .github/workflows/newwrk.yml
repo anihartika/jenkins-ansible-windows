@@ -34,15 +34,15 @@ jobs:
       - name: Check Ansible Installation
         id: check_ansible
         run: |
-          ansible --version >/dev/null 2>&1
-          if [ $? -eq 0 ]; then
+          ansible_version=$(ansible --version)
+          if echo "$ansible_version" | grep -q "ansible"; then
             echo "Ansible is installed"
             echo "::set-output name=ansible_installed::true"
           else
             echo "Ansible is not installed"
             echo "::set-output name=ansible_installed::false"
           fi
-      - name: Install Ansible
+      - name: Install Ansible 
         if: steps.check_ansible.outputs.ansible_installed == 'false'
         run: |
           sudo apt-get update
