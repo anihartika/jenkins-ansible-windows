@@ -66,7 +66,7 @@ jobs:
                 echo "Dynamic inventory needs to be setup"
                 echo "::set-output name=file_exists::false"
                 echo "---
-                plugin: aws_ec2" 
+                plugin: aws_ec2
                 regions:
                     - "us-east-1"
                 keyed_groups:
