@@ -57,6 +57,7 @@ jobs:
         run: |
            sudo mkdir -p /opt/ansible/inventory
            cd /opt/ansible/inventory
+           myinventory=$(cat aws_ec2.yaml)
            if grep -q "plugin"
              echo "Inventory already exists"
            else
@@ -70,6 +71,8 @@ jobs:
                    tag:type: mywinnode
                 compose:
                    ansible_host: public_ip_address"| sudo tee -a aws_ec2.yaml
+                   
+           fi
                 cat aws_ec2.yaml
       - name: Setup Ansible configuration
         run: |
@@ -79,6 +82,7 @@ jobs:
            echo "[defaults]
            enable_plugins = aws_ec2
            inventory = /opt/ansible/inventory/aws_ec2.yaml" | sudo tee -a /etc/ansible/ansible.cfg
+           fi
            cat /etc/ansible/ansible.cfg
            
       - name: Check the dynamic inventory 
