@@ -65,11 +65,7 @@ jobs:
              else
                 echo "Dynamic inventory needs to be setup"
                 echo "::set-output name=file_exists::false"
-             fi
-      - name: Setup dynamic inventory
-        if: steps.check_file.outputs.file_exists == 'false'
-        run: |
-           echo "plugin: aws_ec2
+                  echo "plugin: aws_ec2
                  regions:
                    - "us-east-1"
                  keyed_groups:
@@ -80,8 +76,9 @@ jobs:
                  compose:
                    ansible_host: public_ip_address"| sudo tee -a aws_ec2.yaml
                 cat aws_ec2.yaml
+             fi
                 
-      - name: Check Ansible Configuration
+      - name: Check Ansible Configuration and set it accordingly
         id: check_string
         run: |
           if grep -q "inventory" /etc/ansible/ansible.cfg; then
@@ -90,16 +87,9 @@ jobs:
           else
             echo "Dynamic inventory not defined in ansible configuration"
             echo "::set-output name=string_found::false"
-          fi
-                
-                
-      - name: Define Dynamic inventory configuration
-        if: steps.check_file.outputs.file_exists == 'false'
-        run: |
-           echo "[defaults]
-           enable_plugins = aws_ec2
-           inventory = /opt/ansible/inventory/aws_ec2.yaml" | sudo tee -a /etc/ansible/ansible.cfg
-           fi
+            echo "[defaults]
+                   enable_plugins = aws_ec2
+                   inventory = /opt/ansible/inventory/aws_ec2.yaml" | sudo tee -a /etc/ansible/ansible.cfg
            cat /etc/ansible/ansible.cfg
            
       - name: Check the dynamic inventory 
