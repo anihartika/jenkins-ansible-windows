@@ -56,14 +56,15 @@ jobs:
       - name: Check for dynamic inventory directory
         run: |
            if [ -d /opt/ansible/inventory]; then
-            echo "Directory exists"
+            echo "Inventory Directory exists"
             echo "::set-output name=directory_exists::true"
-          else
+           else
             echo "Directory does not exist"
             echo "::set-output name=directory_exists::false"
-          fi
-        - name: Set the dynamic inventory directory and check inventory
-          if: steps.check_file.outputs.file_exists == 'false'
+           fi
+         
+      - name: Set the dynamic inventory directory and check inventory
+        if: steps.check_file.outputs.file_exists == 'false'
         run: |
            sudo mkdir -p /opt/ansible/inventory
            cd /opt/ansible/inventory
