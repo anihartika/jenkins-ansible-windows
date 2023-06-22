@@ -31,22 +31,16 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install software-properties-common -y && sudo apt-add-repository --yes --update ppa:ansible/ansible
      
-      - name: Check Ansible Installation
+      - name: Check Ansible Installation and install
         id: check_ansible
         run: |
-          ansible_version=$(ansible --version)
-          if echo "$ansible_version" | grep -q "ansible"; then
-            echo "Ansible is installed"
-            echo "::set-output name=ansible_installed::true"
-          else
+          if ! ansible --version >/dev/null 2>&1; then
             echo "Ansible is not installed"
-            echo "::set-output name=ansible_installed::false"
+            sudo apt-get update
+            sudo apt-get install -y ansible
+          else
+            echo "Ansible is already installed"
           fi
-      - name: Install Ansible 
-        if: steps.check_ansible.outputs.ansible_installed == 'false'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ansible
           
       - name: Install Python
         run: |
