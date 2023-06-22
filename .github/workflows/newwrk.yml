@@ -59,8 +59,7 @@ jobs:
         run: |
            sudo mkdir -p /opt/ansible/inventory
            cd /opt/ansible/inventory
-           FILE = aws_ec2.yaml
-           if -f "$FILE"; then
+           if -f "aws_ec2.yaml"; then
                 echo "Dynamic inventory already setup"
                 echo "::set-output name=file_exists::true"
            else
