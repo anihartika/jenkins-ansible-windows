@@ -51,18 +51,17 @@ jobs:
         run: |
            sudo mkdir -p /opt/ansible/inventory
            cd /opt/ansible/inventory
-           echo "---
-           plugin: aws_ec2
-            regions:
-            - "us-east-1"
-            keyed_groups:
-               - key: tags.Name
-            filters:
-             instance-state-name : running
-             tag:type: mywinnode
-             compose:
-                ansible_host: public_ip_address" | sudo tee -a aws_ec2.yaml
-              cat aws_ec2.yaml
+           echo "plugin: aws_ec2
+                 regions:
+                   - "us-east-1"
+                 keyed_groups:
+                   - key: tags.Name
+                filters:
+                   instance-state-name : running
+                   tag:type: mywinnode
+                compose:
+                   ansible_host: public_ip_address"| sudo tee -a aws_ec2.yaml
+                cat aws_ec2.yaml
       - name: Setup Ansible configuration
         run: |
            echo "[defaults]
