@@ -31,10 +31,17 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install software-properties-common -y && sudo apt-add-repository --yes --update ppa:ansible/ansible
      
-      - name: Install  Ansible and Check version
+      - name: Check Ansible Installation
         id: check_ansible
         run: |
-          ansible --version || echo "::set-output name=ansible_installed::false"
+          ansible --version >/dev/null 2>&1
+          if [ $? -eq 0 ]; then
+            echo "Ansible is installed"
+            echo "::set-output name=ansible_installed::true"
+          else
+            echo "Ansible is not installed"
+            echo "::set-output name=ansible_installed::false"
+          fi
       - name: Install Ansible
         if: steps.check_ansible.outputs.ansible_installed == 'false'
         run: |
@@ -53,23 +60,12 @@ jobs:
         run: |
            sudo apt-get update && sudo apt-get install python3-pip -y
            sudo apt-get install python3-winrm -y && sudo sudo pip3 install boto3
-      - name: Check for dynamic inventory directory
-        run: |
-           if [ ls /opt/ansible/inventory]; then
-            echo "Inventory Directory exists"
-            echo "::set-output name=directory_exists::true"
-           else
-            echo "Directory does not exist"
-            echo "::set-output name=directory_exists::false"
-           fi
-         
-      - name: Set the dynamic inventory directory and check inventory
-        if: steps.check_file.outputs.file_exists == 'false'
+     
+      - name: Set the dynamic inventory directory and check inventory file if it exists
         run: |
            sudo mkdir -p /opt/ansible/inventory
            cd /opt/ansible/inventory
-             - name: Check if file exists
-              if [ -f aws_ec2.yaml]; then
+           if [ -f aws_ec2.yaml]; then
                 echo "Dynamic inventory setup"
                 echo "::set-output name=file_exists::true"
              else
