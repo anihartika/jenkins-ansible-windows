@@ -75,13 +75,13 @@ jobs:
                         tag:type: mywinnode
                      compose:
                        ansible_host: public_ip_address" | sudo tee -a aws_ec2.yaml
-                cat aws_ec2.yaml
+                 cat aws_ec2.yaml
            fi
                 
       - name: Check Ansible Configuration and set it accordingly
         id: check_string
         run: |
-          if grep -q "inventory" /etc/ansible/ansible.cfg;
+          if grep -q "inventory" /etc/ansible/ansible.cfg;then
             echo "Dynamic inventory defined"
             echo "::set-output name=string_found::true"
           else
