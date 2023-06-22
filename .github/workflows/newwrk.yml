@@ -65,16 +65,17 @@ jobs:
            else
                 echo "Dynamic inventory needs to be setup"
                 echo "::set-output name=file_exists::false"
-                echo "plugin: aws_ec2
-                      regions:
-                        - "us-east-1"
-                      keyed_groups:
+                echo "---
+                plugin: aws_ec2" 
+                regions:
+                    - "us-east-1"
+                keyed_groups:
                      - key: tags.Name
-                      filters:
-                        instance-state-name : running
-                        tag:type: mywinnode
-                     compose:
-                       ansible_host: public_ip_address" | sudo tee -a aws_ec2.yaml
+                filters:
+                    instance-state-name : running
+                    tag:type: mywinnode
+                compose:
+                    ansible_host: public_ip_address" | sudo tee -a aws_ec2.yaml
              fi
                 
       - name: Check Ansible Configuration and set it accordingly
