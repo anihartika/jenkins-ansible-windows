@@ -19,6 +19,7 @@ jobs:
       - name: Add Repo Ansible
         run: |
           sudo apt-get update && sudo apt install software-properties-common && sudo apt-add-repository --yes --update ppa:ansible/ansible
+     
       - name: Install  Ansible and Check version
         run: |
           sudo apt install ansible -y && ansible --version
@@ -29,10 +30,9 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y python3
           fi
+          python3 --version
           
       - name: Install Python Pip,Boto3 and other dependencies
         run: |
-           python3 --version
-           sudo apt-get install python3-pip -y
-           sudo apt-get install python3-winrm -y
-           sudo apt-get install python-boto3 -y
+           sudo apt-get update && sudo apt-get install python3-pip -y
+           sudo apt-get install python3-winrm -y && sudo apt-get install python-boto3 -y
