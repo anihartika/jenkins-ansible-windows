@@ -1,4 +1,4 @@
-name: Install Ansible
+name: Test Ansible Play
 
 on:
   push:
