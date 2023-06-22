@@ -15,6 +15,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        
+      - name: Configure SSH key
+        run: |
+          echo "$SSH_PRIVATE_KEY" > ssh_private_key
+          chmod 600 ssh_private_key
+
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.5.1
+        with:
+          ssh-private-key: |
+            ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Add Repo Ansible
         run: |
@@ -36,3 +47,18 @@ jobs:
         run: |
            sudo apt-get update && sudo apt-get install python3-pip -y
            sudo apt-get install python3-winrm -y && sudo sudo pip3 install boto3
+      - name: Setup dynamic inventory
+        run: |
+           sudo mkdir -p /opt/ansible/inventory
+           cd /opt/ansible/inventory
+           echo "---
+           plugin: aws_ec2
+            regions:
+            - "us-east-1"
+            keyed_groups:
+               - key: tags.Name
+            filters:
+             instance-state-name : running
+             tag:type: mywinnode
+             compose:
+                ansible_host: public_ip_address" > ec2.yaml
