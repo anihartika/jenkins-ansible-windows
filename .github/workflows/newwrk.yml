@@ -35,4 +35,4 @@ jobs:
       - name: Install Python Pip,Boto3 and other dependencies
         run: |
            sudo apt-get update && sudo apt-get install python3-pip -y
-           sudo apt-get install python3-winrm -y && sudo apt-get install python-boto3 -y
+           sudo apt-get install python3-winrm -y && sudo sudo pip3 install boto3
