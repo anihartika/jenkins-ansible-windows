@@ -70,6 +70,20 @@ jobs:
            inventory = /opt/ansible/inventory/aws_ec2.yaml" | sudo tee -a /etc/ansible/ansible.cfg
            cat /etc/ansible/ansible.cfg
            
-      - name: Check the dynamic inventory
+      - name: Check the dynamic inventory 
         run: |
            ansible all --list-hosts
+           
+      - name: Generate host file for dynamic inventory
+        run: |
+          cd /etc/ansible
+          sudo chmod +x inventory.sh
+          sudo sh inventory.sh
+          #Print inventory
+          cat inventory.ini
+ 
+
+      - name: Run Ansible playbook
+        run: |
+           ansible -i /etc/ansible/inventory.ini -m win_ping win
+           ansible-playbook -i /etc/ansible/inventory.ini windowsplaybook.yaml
