@@ -55,7 +55,7 @@ jobs:
            sudo apt-get install python3-winrm -y && sudo sudo pip3 install boto3
       - name: Check for dynamic inventory directory
         run: |
-           if [ -d /opt/ansible/inventory]; then
+           if [ ls /opt/ansible/inventory]; then
             echo "Inventory Directory exists"
             echo "::set-output name=directory_exists::true"
            else
