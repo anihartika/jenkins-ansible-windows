@@ -1,4 +1,4 @@
-name: Test Ansible Play Updated New
+name: Test Ansible Play Updated Windows
 
 on:
   push:
