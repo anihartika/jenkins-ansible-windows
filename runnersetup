@@ -9,3 +9,29 @@ or setting up as service
 sudo ./svc.sh install
 sudo ./svc.sh start
 sudo ./svc.sh status
+your_github_username: Your GitHub username.
+your_repository_name: The name of your repository where the self-hosted runner should be registered.
+your_runner_token: The runner token generated in your GitHub repository settings.
+comma_separated_labels: The labels you want to assign to the runner (e.g., linux,x64).
+
+#!/bin/bash
+REPO_OWNER=azureaws
+REPO_NAME=jenkins-ansible-windows
+RUNNER_TOKEN=A7J2MFRDPQ2OFALLP5Y5D73ESYMDG
+LABELS=linux,x64
+
+# Install dependencies
+sudo yum update -y
+sudo yum install -y git
+
+# Download and configure the GitHub Actions runner
+mkdir actions-runner && cd actions-runner
+curl -O -L https://github.com/actions/runner/releases/download/v2.283.3/actions-runner-linux-x64-2.283.3.tar.gz
+tar xzf ./actions-runner-linux-x64-2.283.3.tar.gz
+
+# Configure the runner
+./config.sh --url https://github.com/$REPO_OWNER/$REPO_NAME --token $RUNNER_TOKEN --labels $LABELS --unattended
+
+# Start the runner as a service
+sudo ./svc.sh install
+sudo ./svc.sh start
