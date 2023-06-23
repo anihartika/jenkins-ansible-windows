@@ -117,7 +117,7 @@ jobs:
           sudo chmod -R 777 /etc/ansible/
           echo "---
           ansible_user: ${{ secrets.WIN_USER }}
-          ansible_password: ${{ secrets.WIN_PASSWORD }}"
+          ansible_password: ${{ secrets.WIN_PASSWORD }}
           ansible_connection: winrm
           ansible_winrm_server_cert_validation: ignore
           ansible_winrm_transport: ntlm
