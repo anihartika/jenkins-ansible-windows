@@ -108,7 +108,7 @@ jobs:
           cat inventory.ini
       - name: Configure inventory with connection variables
         run: |
-          sudo mkdir /etc/ansible/group_vars
+          mkdir /etc/ansible/group_vars
           sudo chmod -R 777 /etc/ansible/
           echo "---
           ansible_user: ${{ secrets.WIN_USER }}
