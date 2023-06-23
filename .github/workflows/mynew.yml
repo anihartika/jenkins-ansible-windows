@@ -108,21 +108,24 @@ jobs:
           cat inventory.ini
       - name: Configure inventory with connection variables
         run: |
-          if ls /etc/ansible/group_vars >/dev/null 2>&1;then
-            echo "Variable directory exists"
-          else
+         sudo mkdir /etc/ansible/group_vars
+         cd group_vars
+         if [ -f "win.yaml" ]; then
+           echo "Inventory connection varaibles already defined"
+         else
             echo "Directory does not exist"
             mkdir /etc/ansible/group_vars
+            sudo chmod -R 777 /etc/ansible/
+            echo "---
+            ansible_user: ${{ secrets.WIN_USER }}
+            ansible_password: ${{ secrets.WIN_PASSWORD }}
+            ansible_connection: winrm
+            ansible_winrm_server_cert_validation: ignore
+            ansible_winrm_transport: ntlm
+            ansible_winrm_port: 5986" |sudo tee -a /etc/ansible/win.yaml
+            cat win.yaml
           fi
-          sudo chmod -R 777 /etc/ansible/
-          echo "---
-          ansible_user: ${{ secrets.WIN_USER }}
-          ansible_password: ${{ secrets.WIN_PASSWORD }}
-          ansible_connection: winrm
-          ansible_winrm_server_cert_validation: ignore
-          ansible_winrm_transport: ntlm
-          ansible_winrm_port: 5986" |sudo tee -a /etc/ansible/win.yaml
-          cat win.yaml
+
            
       - name: Check connectivity
         run: |
