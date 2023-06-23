@@ -107,7 +107,6 @@ jobs:
           #Print inventory
           cat inventory.ini
           if grep -q "win" /etc/ansible/inventory.ini;then
-            echo "Dynamic hosts found"
             echo '[win:vars]
                   ansible_user=${{ secrets.WIN_USER }}
                   ansible_password=${{ secrets.WIN_PASSWORD }}
