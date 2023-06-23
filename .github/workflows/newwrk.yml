@@ -111,7 +111,7 @@ jobs:
           while IFS= read -r host
           do
           echo "$host" >> "$inventory_file"
-          done < "$hosts_file"
+          done < sudo tee -a "$hosts_file"
           echo "Inventory file generated: $inventory_file"
           sudo chmod +x $inventory_file
           else
