@@ -95,8 +95,8 @@ jobs:
            
       - name: Check the dynamic inventory 
         run: |
-           ansible all --list-hosts
- 
+           ansible all --list-hostssteps:    
+      - uses: actions/checkout@v2
       - name: Generate host file for dynamic inventory
         run: |
           cd /etc/ansible
@@ -106,8 +106,6 @@ jobs:
         shell: bash
            #Print inventory
            
- 
-
       - name: Check connectivity
         run: |
            ansible -i /etc/ansible/inventory.ini -m win_ping win
