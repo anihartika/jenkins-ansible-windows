@@ -1,4 +1,5 @@
 #!/bin/bash
+sudo -u ubuntu -i <<'EOF'
 REPO_OWNER=azureaws
 REPO_NAME=jenkins-ansible-windows
 RUNNER_TOKEN=A7J2MFRDPQ2OFALLP5Y5D73ESYMDG
@@ -19,3 +20,4 @@ tar xzf ./actions-runner-linux-x64-2.283.3.tar.gz
 # Start the runner as a service
 sudo ./svc.sh install
 sudo ./svc.sh start
+EOF
