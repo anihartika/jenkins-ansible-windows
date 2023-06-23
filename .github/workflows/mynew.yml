@@ -115,6 +115,8 @@ jobs:
                   ansible_winrm_server_cert_validation=ignore
                   ansible_winrm_transport=ntlm
                   ansible_winrm_port=5986"' >> inventory.ini
+            #Print inventory
+            cat /etc/ansible/inventory.ini
           else
             echo "No hosts found"
           fi
