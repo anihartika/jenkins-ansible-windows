@@ -1,0 +1,77 @@
+name: Test Ansible Play Updated
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Configure SSH key
+        run: |
+          echo "$SSH_PRIVATE_KEY" > ssh_private_key
+          chmod 600 ssh_private_key
+
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.5.1
+        with:
+          ssh-private-key: |
+            ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add Repo Ansible
+        run: |
+          sudo apt-get update && sudo apt-get install software-properties-common -y && sudo apt-add-repository --yes --update ppa:ansible/ansible
+     
+      - name: Check Ansible Installation and install
+        id: check_ansible
+        run: |
+          if ! ansible --version >/dev/null 2>&1; then
+            echo "Ansible is not installed"
+            sudo apt-get update
+            sudo apt-get install -y ansible
+          else
+            echo "Ansible is already installed"
+          fi
+          
+      - name: Install Python
+        run: |
+          if ! command -v python3 &> /dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y python3
+          fi
+          python3 --version
+          
+      - name: Install Python Pip,Boto3 and other dependencies
+        run: |
+           sudo apt-get update && sudo apt-get install python3-pip -y
+           sudo apt-get install python3-winrm -y && sudo sudo pip3 install boto3
+         
+      - name: Create Shell Script
+        id: create_script
+        run: |
+          echo "#!/bin/bash
+          'ansible-inventory --list|grep -o '"public_ip_addreansibless": "[^"]*'|awk -F': "' '{print $2}'' > hosts.txt
+          hosts_file="hosts.txt"
+          inventory_file="inventory.ini"
+          # Check if the hosts file exists
+          if [ -f "$hosts_file" ]; then
+          # Create an inventory file
+          echo "[win]" > "$inventory_file"
+          # Read the hosts from the file and append them to the inventory file
+          while IFS= read -r host
+          do
+          echo "$host" >> "$inventory_file"
+          done < "$hosts_file"
+          echo "Inventory file generated: $inventory_file"  
+          else
+          echo "Hosts file not found: $hosts_file"
+          fi" > hostgen.sh 
