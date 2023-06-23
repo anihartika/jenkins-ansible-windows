@@ -99,8 +99,7 @@ jobs:
            
       - name: Generate host file for dynamic inventory
         run: |
-          sudo chmod +x hostgen.sh
-          sudo sh hostgen.sh
+          ./hostgen.sh
           cat inventory.ini
           sudo cp inventory.ini /etc/ansible
         shell: bash
