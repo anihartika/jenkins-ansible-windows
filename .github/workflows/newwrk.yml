@@ -103,8 +103,8 @@ jobs:
           sudo chmod +x inventoryge.sh
           sudo sh inventory.sh
         shell: bash
-          #Print inventory
-          cat inventory.ini
+           #Print inventory
+           cat inventory.ini
  
 
       - name: Check connectivity
