@@ -106,8 +106,8 @@ jobs:
           cd /etc/ansible
           sudo chmod +x host.sh
           sudo sh host.sh
-          sudo chmod 777 inventory.ini
-          if grep -q "win" /etc/ansible/inventory.ini;then
+          if [ -f "inventory.ini" ]; then
+            sudo chmod 777 inventory.ini
             echo '[win:vars]'>> inventory.ini
             echo  'ansible_user=${{ secrets.WIN_USER }}' >> inventory.ini
             echo  'ansible_password=${{ secrets.WIN_PASSWORD }}'>> inventory.ini
