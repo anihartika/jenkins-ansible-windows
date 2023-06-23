@@ -11,6 +11,7 @@ on:
 jobs:
   build:
     runs-on: self-hosted
+    environment: windows  
 
     steps:
       - name: Checkout repository
