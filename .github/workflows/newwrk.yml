@@ -97,35 +97,37 @@ jobs:
         run: |
            ansible all --list-hosts
          
-      - name: Create Shell Script
-        id: create_script
+      - name: Create host file for generated dynamic inventory
+        id: create_host
         run: |
-          echo "#!/bin/bash
-          'ansible-inventory --list|grep -o '"public_ip_addreansibless": "[^"]*'|awk -F': "' '{print $2}'' > hosts.txt
+          ansible-inventory --list|grep -o '"public_ip_address": "[^"]*'|awk -F': "' '{print $2}' > hosts.txt
           hosts_file="hosts.txt"
           inventory_file="inventory.ini"
+
           # Check if the hosts file exists
           if [ -f "$hosts_file" ]; then
           # Create an inventory file
-          echo "[win]" > "$inventory_file"
-          # Read the hosts from the file and append them to the inventory file
+            echo "[win]" > "$inventory_file"
+            # Read the hosts from the file and append them to the inventory file
           while IFS= read -r host
           do
           echo "$host" >> "$inventory_file"
           done < "$hosts_file"
-          echo "Inventory file generated: $inventory_file"  
+          echo "Inventory file generated: $inventory_file"
+          cat inventory.ini
           else
           echo "Hosts file not found: $hosts_file"
-          fi" | sudo tee -a hostgen.sh 
-           
-      - name: Generate host file for dynamic inventory
-        run: |
-          cd /etc/ansible
-          sudo cp hostgen.sh .
-          sudo chmod +x hostgen.sh
-          sudo sh hostgen.sh
+          fi
+        
+       #Other way to copy script to control node and execute as below    
+      #- name: Generate host file for dynamic inventory
+      #run: |
+         # cd /etc/ansible
+          #sudo cp hostgen.sh .
+          #sudo chmod +x hostgen.sh
+          #sudo sh hostgen.sh
           #Print inventory
-          cat inventory.ini
+          #cat inventory.ini
  
 
       - name: Run Ansible playbook
