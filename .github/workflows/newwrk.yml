@@ -101,7 +101,7 @@ jobs:
       - name: Generate host file for dynamic inventory
         run: |
           cd /etc/ansible
-          chmod +x "${GITHUB_WORKSPACE}/.github/inventoryge.sh"
+          sudo chmod +x "${GITHUB_WORKSPACE}/.github/inventoryge.sh"
           sudo sh inventoryge.sh
           cat inventory.ini
         shell: bash
