@@ -99,12 +99,10 @@ jobs:
            
       - name: Generate host file for dynamic inventory
         run: |
-          cd /etc/ansible
-          #Copy script from github to runner path
-          sudo cp inventoryge.sh /home/ubuntu/actions-runner/_work/jenkins-ansible-windows/jenkins-ansible-windows/
-          sudo chmod +x inventoryge.sh
-          sudo sh inventoryge.sh
+          sudo chmod +x hostgen.sh
+          sudo sh hostgen.sh
           cat inventory.ini
+          sudo cp inventory.ini /etc/ansible
         shell: bash
            #Print inventory
            
