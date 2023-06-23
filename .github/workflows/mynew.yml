@@ -42,9 +42,7 @@ jobs:
           else
             echo "Ansible is already installed"
           fi
-          
-     
-          
+            
       - name: Install Python
         run: |
           if ! command -v python3 &> /dev/null; then
@@ -99,14 +97,13 @@ jobs:
            
       - name: Check the dynamic inventory 
         run: |
-           ansible all --list-hosts
-
-           
+           ansible all --list-hosts      
+   
       #Copy the hostgeneration script to the control node under /etc/ansible
       - name: Generate host file for dynamic inventory and add connection params
         run: |
+          sudo cp /home/ubuntu/scripts/host.sh /etc/ansible
           cd /etc/ansible
-          sudo cp /home/ubuntu/scripts/host.sh .
           sudo chmod +x host.sh
           sudo sh host.sh
           #Print inventory
