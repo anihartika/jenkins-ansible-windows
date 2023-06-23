@@ -108,13 +108,15 @@ jobs:
           cat inventory.ini
       - name: Configure inventory with connection variables
         run: |
-         sudo mkdir /etc/ansible/group_vars
-         cd group_vars
+         if ls /etc/ansible/group_vars >/dev/null 2>&1; then
+            echo "Group vars Directory exists"
+         else
+            echo "Group vars Directory exists"
+            sudo mkdir /etc/ansible/group_vars
+         fi
          if [ -f "win.yaml" ]; then
            echo "Inventory connection varaibles already defined"
          else
-            echo "Directory does not exist"
-            mkdir /etc/ansible/group_vars
             sudo chmod -R 777 /etc/ansible/
             echo "---
             ansible_user: ${{ secrets.WIN_USER }}
