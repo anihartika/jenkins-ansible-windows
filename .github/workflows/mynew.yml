@@ -108,7 +108,7 @@ jobs:
           cat inventory.ini
       - name: Configure inventory with connection variables
         run: |
-          if ls /etc/ansible/group_vars >/dev/null 2>&1;
+          if ls /etc/ansible/group_vars >/dev/null 2>&1;then
             echo "Variable directory exists"
           else
             echo "Directory does not exist"
