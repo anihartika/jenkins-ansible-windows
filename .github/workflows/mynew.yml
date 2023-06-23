@@ -118,13 +118,14 @@ jobs:
            echo "Inventory connection varaibles already defined"
          else
             sudo chmod -R 777 /etc/ansible/
+            cd /etc/ansible/group_vars
             echo "---
             ansible_user: ${{ secrets.WIN_USER }}
             ansible_password: ${{ secrets.WIN_PASSWORD }}
             ansible_connection: winrm
             ansible_winrm_server_cert_validation: ignore
             ansible_winrm_transport: ntlm
-            ansible_winrm_port: 5986" |sudo tee -a /etc/ansible/win.yaml
+            ansible_winrm_port: 5986" >> win.yaml
             cat win.yaml
           fi
 
