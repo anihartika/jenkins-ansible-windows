@@ -107,14 +107,14 @@ jobs:
           #Print inventory
           cat inventory.ini
           if grep -q "win" /etc/ansible/inventory.ini;then
-            echo "Dynamic inventory defined"
-            echo "[win:vars]
+            echo "Dynamic hosts found"
+            echo '"[win:vars]
                   ansible_user=${{ secrets.WIN_USER }}
                   ansible_password=${{ secrets.WIN_PASSWORD }}
                   ansible_connection=winrm
                   ansible_winrm_server_cert_validation=ignore
                   ansible_winrm_transport=ntlm
-                  ansible_winrm_port=5986" >> inventory.ini
+                  ansible_winrm_port=5986"' >> inventory.ini
           else
             echo "No hosts found"
           fi
