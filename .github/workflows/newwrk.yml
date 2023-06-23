@@ -100,12 +100,13 @@ jobs:
       - name: Create host file for generated dynamic inventory
         id: create_host
         run: |
-          sudo bash -c '
-          cd /etc/ansible
-          ansible-inventory --list|grep -o '"public_ip_address": "[^"]*'|awk -F': "' '{print $2}' > hosts.txt
+          
+          sudo cd /etc/ansible
+          ansible-inventory --list|grep -o '"public_ip_address": "[^"]*'|awk -F': "' '{print $2}' | sudo tee -a hosts.txt
           hosts_file="hosts.txt"
           inventory_file="inventory.ini"
           # Check if the hosts file exists
+          sudo bash -c '
           if [ -f "$hosts_file" ]; then
           # Create an inventory file
             echo "[win]" > "$inventory_file"
@@ -117,7 +118,8 @@ jobs:
           echo "Inventory file generated: $inventory_file"
           else
           echo "Hosts file not found: $hosts_file"
-          fi'
+          fi
+          '
       #Otherway
       #- name: Generate host file for dynamic inventory
        # run: |
