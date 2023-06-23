@@ -105,6 +105,18 @@ jobs:
           sudo sh inventory.sh
           #Print inventory
           cat inventory.ini
+      - name: Configure inventory with connection variables
+        run: |
+          sudo mkdir /etc/ansible/group_vars
+          sudo chmod -R 777 /etc/ansible/
+          echo "---
+          ansible_user: ${{ secrets.WIN_USER }}
+          ansible_password: ${{ secrets.WIN_PASSWORD }}"
+          ansible_connection: winrm
+          ansible_winrm_server_cert_validation: ignore
+          ansible_winrm_transport: ntlm
+          ansible_winrm_port: 5986" >> inventory.ini
+          cat inventory.ini
            
       - name: Check connectivity
         run: |
