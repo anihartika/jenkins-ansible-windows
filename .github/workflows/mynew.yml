@@ -106,7 +106,7 @@ jobs:
           cd /etc/ansible
           sudo chmod +x host.sh
           sudo sh host.sh
-          if [ -f "inventory.ini" ]; then
+          if [ -s "inventory.ini" ]; then
             sudo chmod 777 inventory.ini
             echo '[win:vars]'>> inventory.ini
             echo  'ansible_user=${{ secrets.WIN_USER }}' >> inventory.ini
