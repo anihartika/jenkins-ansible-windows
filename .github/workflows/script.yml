@@ -58,21 +58,21 @@ jobs:
       - name: Create Shell Script
         id: create_script
         run: |
-          echo "#!/bin/bash
+          echo "'#!/bin/bash
           'ansible-inventory --list|grep -o '"public_ip_addreansibless": "[^"]*'|awk -F': "' '{print $2}'' > hosts.txt
-          hosts_file=\"hosts.txt\"
-          inventory_file=\"inventory.ini\"
+          hosts_file="hosts.txt"
+          inventory_file="inventory.ini"
           # Check if the hosts file exists
-          if [ -f \"$hosts_file\" ]; then
+          if [ -f "$hosts_file" ]; then
           # Create an inventory file
-          echo \"[win]\" > \"$inventory_file\"
+          echo "[win]" > "$inventory_file"
           # Read the hosts from the file and append them to the inventory file
           while IFS= read -r host
           do
-          echo \"$host\" >> \"$inventory_file\"
-          done < \"$hosts_file\"
-          echo \"Inventory file generated: \$inventory_file\"  
+          echo "$host" >> "$inventory_file"
+          done < "$hosts_file"
+          echo "Inventory file generated: $inventory_file"  
           else
-          echo \"Hosts file not found: \$hosts_file\"
+          echo "Hosts file not found: $hosts_file"
           fi
-          echo \"End of script"\"| sudo tee -a hostgen.sh 
+          echo "End of script""'| sudo tee -a hostgen.sh 
