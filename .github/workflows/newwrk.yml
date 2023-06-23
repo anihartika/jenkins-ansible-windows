@@ -95,7 +95,8 @@ jobs:
            
       - name: Check the dynamic inventory 
         run: |
-           ansible all --list-hostssteps:    
+           ansible all --list-hosts
+           
       - uses: actions/checkout@v2
       - name: Generate host file for dynamic inventory
         run: |
