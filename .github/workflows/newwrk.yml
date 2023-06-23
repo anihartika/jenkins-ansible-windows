@@ -100,8 +100,7 @@ jobs:
       - name: Create host file for generated dynamic inventory
         id: create_host
         run: |
-          
-          sudo cd /etc/ansible
+          cd /etc/ansible
           ansible-inventory --list|grep -o '"public_ip_address": "[^"]*'|awk -F': "' '{print $2}' | sudo tee -a hosts.txt
           hosts_file="hosts.txt"
           inventory_file="inventory.ini"
