@@ -113,10 +113,9 @@ jobs:
                     ansible_user=${{ secrets.WIN_USER }}
                     ansible_password=${{ secrets.WIN_PASSWORD }}
                     ansible_connection=winrm
-                    ansible_shell_type=cmd
                     ansible_winrm_server_cert_validation= ignore
-                    ansible_winrm_transport: ntlm
-                    ansible_winrm_port: 5986" >> /etc/ansible/inventory.ini
+                    ansible_winrm_transport=ntlm
+                    ansible_winrm_port=5986" >> /etc/ansible/inventory.ini
            
       - name: Check connectivity
         run: |
