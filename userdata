@@ -1,10 +1,8 @@
-cd /home/ubuntu
-sudo mkdir scripts
+mkdir /home/ubuntu/scripts
 cd scripts
 touch host.sh
 #!/bin/bash
-
-ansible-inventory --list|grep -o '"public_ip_address": "[^"]*'|awk -F': "' '{print $2}' > hosts.txt
+echo "ansible-inventory --list|grep -o '"public_ip_address": "[^"]*'|awk -F': "' '{print $2}' > hosts.txt
 hosts_file="hosts.txt"
 inventory_file="inventory.ini"
 
@@ -22,4 +20,4 @@ if [ -f "$hosts_file" ]; then
     echo "Inventory file generated: $inventory_file"
 else
     echo "Hosts file not found: $hosts_file"
-fi >> host.sh
+fi">> host.sh
