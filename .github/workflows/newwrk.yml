@@ -97,13 +97,14 @@ jobs:
         run: |
            ansible all --list-hosts
            
+      #Copy the hostgeneration script to the control node under /etc/ansible
       - name: Generate host file for dynamic inventory
         run: |
-          ./hostgen.sh
+          cd /etc/ansible
+          sudo chmod +x inventory.sh
+          sudo sh inventory.sh
+          #Print inventory
           cat inventory.ini
-          sudo cp inventory.ini /etc/ansible
-        shell: bash
-           #Print inventory
            
       - name: Check connectivity
         run: |
