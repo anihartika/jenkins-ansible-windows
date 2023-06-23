@@ -102,9 +102,10 @@ jobs:
           cd /etc/ansible
           sudo chmod +x inventoryge.sh
           sudo sh inventory.sh
+          cat inventory.ini
         shell: bash
            #Print inventory
-           cat inventory.ini
+           
  
 
       - name: Check connectivity
