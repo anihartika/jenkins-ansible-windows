@@ -115,6 +115,7 @@ jobs:
           done < "$hosts_file"
           echo "Inventory file generated: $inventory_file"
           cat inventory.ini
+          sudo cp inventory.ini /etc/ansible
           else
           echo "Hosts file not found: $hosts_file"
           fi
@@ -132,5 +133,6 @@ jobs:
 
       - name: Run Ansible playbook
         run: |
+           
            ansible -i /etc/ansible/inventory.ini -m win_ping win
            ansible-playbook -i /etc/ansible/inventory.ini windowsplaybook.yaml
