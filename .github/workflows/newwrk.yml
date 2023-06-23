@@ -97,11 +97,11 @@ jobs:
         run: |
            ansible all --list-hosts
            
-      - uses: actions/checkout@v2
       - name: Generate host file for dynamic inventory
         run: |
           cd /etc/ansible
-          sudo chmod +x "${GITHUB_WORKSPACE}/.github/scripts/inventoryge.sh"
+          bash ${GITHUB_WORKSPACE}/inventoryge.sh
+          sudo chmod +x "${GITHUB_WORKSPACE}/inventoryge.sh"
           sudo sh inventoryge.sh
           cat inventory.ini
         shell: bash
