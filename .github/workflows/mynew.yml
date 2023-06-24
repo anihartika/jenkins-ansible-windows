@@ -20,17 +20,14 @@ jobs:
       - name: Configure SSH 
         env:
          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-         INSTANCE_IP: ${{ vars.INSTANCE_IP }}
         run: |
          mkdir -p ~/.ssh/
-         echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
-         chmod 600 ~/.ssh/id_rsa >> ~/.ssh/known_hosts
+         echo "$PRIVATE_KEY" > ssh_private_key
+         chmod 600 ssh_private_key
          
       - name: Copy the script
-        env:
-         INSTANCE_IP: ${{ vars.INSTANCE_IP }}
         run: |
-         scp -i ~/.ssh/id_rsa host.sh ubuntu@$INSTANCE_IP:/home/ubuntu
+         scp -i ssh_private_key host.sh ubuntu@$INSTANCE_IP:/home/ubuntu
      
       - name: Add Repo Ansible
         run: |
