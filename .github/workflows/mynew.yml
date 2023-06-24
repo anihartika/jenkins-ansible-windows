@@ -27,6 +27,8 @@ jobs:
          chmod 600 ~/.ssh/id_rsa >> ~/.ssh/known_hosts
          
       - name: Copy the script
+        env:
+         INSTANCE_IP: ${{ vars.INSTANCE_IP }}
         run: |
          scp -i ~/.ssh/id_rsa host.sh ubuntu@$INSTANCE_IP:/home/ubuntu
      
