@@ -8,12 +8,9 @@ LABELS=selfhosted,Linux,X64
 # Install dependencies
 sudo yum update -y
 sudo yum install -y git
-git clone https://github.com/$REPO_OWNER/$REPO_NAME
-cd $REPO_NAME
-cp host.sh /home/ubuntu
 
 # Download and configure the GitHub Actions runner
-cd /home/ubuntu
+# Create a folder
 mkdir actions-runner && cd actions-runner# Download the latest runner package
 curl -o actions-runner-osx-x64-2.305.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.305.0/actions-runner-osx-x64-2.305.0.tar.gz# Optional: Validate the hash
 echo "a7c623e013f97db6c73c27288047c1d02ab6964519020ad0e87e69c328e96534  actions-runner-osx-x64-2.305.0.tar.gz" | shasum -a 256 -c# Extract the installer
