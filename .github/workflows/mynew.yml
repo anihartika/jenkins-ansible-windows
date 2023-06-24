@@ -17,23 +17,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         
-      - name: Configure SSH key
+      - name: Configure SSH
+        env:
+         PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+         INSTANCE_IP: ${{ secrets.INSTANCE_IP }}
         run: |
-          echo "$SSH_PRIVATE_KEY" > ssh_private_key
-          chmod 600 ssh_private_key
-
-      - name: Set up SSH agent
-        uses: webfactory/ssh-agent@v0.5.1
-        with:
-          ssh-private-key: |
-            ${{ secrets.SSH_PRIVATE_KEY }}     
-                
-      - name: Copy Script
+         mkdir -p ~/.ssh/
+         echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
+         chmod 600 ~/.ssh/id_rsa
+         ssh-keyscan -H $INSTANCE_IP >> ~/.ssh/known_hosts
+     
+      - name: Copy File
         run: |
-          eval "$(ssh-agent -s)"
-          ssh -i  ${{ secrets.SSH_PRIVATE_KEY }} ubuntu@${{ vars.INSTANCE_IP }}: 'mkdir -p /home/ubuntu/scripts'
-          scp -r  ${{ secrets.SSH_PRIVATE_KEY }} host.sh ubuntu@${{ vars.INSTANCE_IP }}://home/ubuntu/scripts
-
+          scp -i ~/.ssh/id_rsa host.sh ubuntu@$INSTANCE_IP:/home/ubuntu
       - name: Add Repo Ansible
         run: |
           sudo apt-get update && sudo apt-get install software-properties-common -y && sudo apt-add-repository --yes --update ppa:ansible/ansible
@@ -108,7 +104,7 @@ jobs:
       #Copy the hostgeneration script to the control node under /etc/ansible
       - name: Generate host file for dynamic inventory and add connection params
         run: |
-          sudo cp /home/ubuntu/scripts/host.sh /etc/ansible
+          sudo cp /home/ubuntu/host.sh /etc/ansible
           cd /etc/ansible
           sudo chmod +x host.sh
           sudo sh host.sh
