@@ -32,8 +32,8 @@ jobs:
         run: |
           eval "$(ssh-agent -s)"
           ssh-add ${{ secrets.SSH_PRIVATE_KEY }} 
-          ssh -i ubuntu@${{ vars.INSTANCE_IP }}: 'mkdir -p /home/ubuntu/scripts'
-          scp -r host.sh ubuntu@${{ vars.INSTANCE_IP }}://home/ubuntu/scripts
+          ssh -i  ${{ secrets.SSH_PRIVATE_KEY }} ubuntu@${{ vars.INSTANCE_IP }}: 'mkdir -p /home/ubuntu/scripts'
+          scp -r  ${{ secrets.SSH_PRIVATE_KEY }} host.sh ubuntu@${{ vars.INSTANCE_IP }}://home/ubuntu/scripts
 
       - name: Add Repo Ansible
         run: |
