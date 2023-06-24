@@ -17,17 +17,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         
-      - name: Configure SSH 
-        env:
-         PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Configure SSH key
         run: |
-         mkdir -p ~/.ssh/
-         echo "$PRIVATE_KEY" > ssh_private_key
-         chmod 600 ssh_private_key
-         
-      - name: Copy the script
-        run: |
-         scp -i ssh_private_key host.sh ubuntu@$INSTANCE_IP:/home/ubuntu
+          echo "$SSH_PRIVATE_KEY" > ssh_private_key
+          chmod 600 ssh_private_key
+
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.5.1
+        with:
+          ssh-private-key: |
+            ${{ secrets.SSH_PRIVATE_KEY }
      
       - name: Add Repo Ansible
         run: |
