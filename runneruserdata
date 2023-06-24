@@ -8,8 +8,12 @@ LABELS=linux,x64
 # Install dependencies
 sudo yum update -y
 sudo yum install -y git
+git clone https://github.com/$REPO_OWNER/$REPO_NAME
+cd $REPO_NAME
+cp host.sh /home/ubuntu
 
 # Download and configure the GitHub Actions runner
+cd /home/ubuntu
 mkdir actions-runner && cd actions-runner
 curl -O -L https://github.com/actions/runner/releases/download/v2.283.3/actions-runner-linux-x64-2.283.3.tar.gz
 tar xzf ./actions-runner-linux-x64-2.283.3.tar.gz
