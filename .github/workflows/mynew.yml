@@ -17,19 +17,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         
-      - name: Configure SSH key
+      - name: Configure SSH
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          echo "$SSH_PRIVATE_KEY" > ssh_private_key
-          chmod 600 ssh_private_key
-
-      - name: Set up SSH agent
-        uses: webfactory/ssh-agent@v0.5.1
-        with:
-          ssh-private-key: |
-            ${{ secrets.SSH_PRIVATE_KEY }}
-            
-      - name: Transfer script to instance
-        run: scp -i host.sh ubuntu@${{ vars.INSTANCE_IP }}:/home/ubuntu
+         mkdir -p ~/.ssh/
+          echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+         ssh-keyscan -H {{ vars.INSTANCE_IP }} >> ~/.ssh/known_hosts
+         
+      - name: Copy Script
+        run: |
+          ssh username@ubuntu_instance_ip 'mkdir -p /home/ubuntu/scripts'
+          scp -r host.sh ubuntu@{{ vars.INSTANCE_IP }}://home/ubuntu/scripts
 
       - name: Add Repo Ansible
         run: |
@@ -105,7 +105,7 @@ jobs:
       #Copy the hostgeneration script to the control node under /etc/ansible
       - name: Generate host file for dynamic inventory and add connection params
         run: |
-          sudo cp /home/ubuntu/host.sh /etc/ansible
+          sudo cp /home/ubuntu/scripts/host.sh /etc/ansible
           cd /etc/ansible
           sudo chmod +x host.sh
           sudo sh host.sh
