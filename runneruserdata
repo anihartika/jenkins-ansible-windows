@@ -2,8 +2,8 @@
 sudo -u ubuntu -i <<'EOF'
 REPO_OWNER=azureaws
 REPO_NAME=jenkins-ansible-windows
-RUNNER_TOKEN=A7J2MFRDPQ2OFALLP5Y5D73ESYMDG
-LABELS=linux,x64
+RUNNER_TOKEN=A7J2MFXD335P3EB3HLIWA7TESZM4M
+LABELS=selfhosted,Linux,X64
 
 # Install dependencies
 sudo yum update -y
