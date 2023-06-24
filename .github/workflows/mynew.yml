@@ -31,8 +31,8 @@ jobs:
       - name: Copy Script
         run: |
           eval "$(ssh-agent -s)"
-          ssh -i ubuntu@{{ vars.INSTANCE_IP }}: 'mkdir -p /home/ubuntu/scripts'
-          scp -r host.sh ubuntu@{{ vars.INSTANCE_IP }}://home/ubuntu/scripts
+          ssh -i ubuntu@${{ vars.INSTANCE_IP }}: 'mkdir -p /home/ubuntu/scripts'
+          scp -r host.sh ubuntu@${{ vars.INSTANCE_IP }}://home/ubuntu/scripts
 
       - name: Add Repo Ansible
         run: |
