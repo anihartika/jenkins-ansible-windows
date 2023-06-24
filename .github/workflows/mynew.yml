@@ -17,18 +17,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         
-      - name: Configure SSH
+      - name: Configure SSH 
         env:
          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-         INSTANCE_IP: ${{ secrets.INSTANCE_IP }}
+         INSTANCE_IP: ${{ vars.INSTANCE_IP }}
         run: |
          mkdir -p ~/.ssh/
          echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
          chmod 600 ~/.ssh/id_rsa >> ~/.ssh/known_hosts
-     
-      - name: Copy File
+         
+      - name: Copy the script
         run: |
-          scp -i ~/.ssh/id_rsa host.sh ubuntu@$INSTANCE_IP:/home/ubuntu
+         scp -i ~/.ssh/id_rsa host.sh ubuntu@$INSTANCE_IP:/home/ubuntu
+     
       - name: Add Repo Ansible
         run: |
           sudo apt-get update && sudo apt-get install software-properties-common -y && sudo apt-add-repository --yes --update ppa:ansible/ansible
