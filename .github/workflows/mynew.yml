@@ -19,19 +19,19 @@ jobs:
         
       - name: Configure SSH key
         run: |
-           mkdir -p ~/.ssh/
-           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-           chmod 600 ~/.ssh/id_rsa
-           ssh-keyscan -H {{ vars.INSTANCE_IP }} >> ~/.ssh/known_hosts
-           
+          echo "$SSH_PRIVATE_KEY" > ssh_private_key
+          chmod 600 ssh_private_key
+
       - name: Set up SSH agent
         uses: webfactory/ssh-agent@v0.5.1
         with:
           ssh-private-key: |
-            ${{ secrets.SSH_PRIVATE_KEY }}       
+            ${{ secrets.SSH_PRIVATE_KEY }}     
                 
       - name: Copy Script
         run: |
+          eval "$(ssh-agent -s)"
+          ssh-add ${{ secrets.SSH_PRIVATE_KEY }}
           ssh ubuntu@{{ vars.INSTANCE_IP }}: 'mkdir -p /home/ubuntu/scripts'
           scp -r host.sh ubuntu@{{ vars.INSTANCE_IP }}://home/ubuntu/scripts
 
