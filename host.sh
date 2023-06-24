@@ -5,7 +5,7 @@ hosts_file="hosts.txt"
 inventory_file="inventory.ini"
 
 # Check if the hosts file exists
-if [ -f "$hosts_file" ]; then
+if [ -s "$hosts_file" ]; then
     # Create an inventory file
     echo "[win]" > "$inventory_file"
 
@@ -17,5 +17,5 @@ if [ -f "$hosts_file" ]; then
 
     echo "Inventory file generated: $inventory_file"
 else
-    echo "Hosts file not found: $hosts_file"
+    echo "Hosts file is empty /not found: $hosts_file"
 fi
