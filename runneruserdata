@@ -19,7 +19,6 @@ tar xzf ./actions-runner-linux-x64-2.305.0.tar.gz
 ./config.sh --url https://github.com/$REPO_OWNER/$REPO_NAME --token $RUNNER_TOKEN --labels $LABELS --unattended
 
 # Start the runner as a service
-cd /home/ubuntu/actions-runner
 sudo ./svc.sh install
 sudo ./svc.sh start
 EOF
