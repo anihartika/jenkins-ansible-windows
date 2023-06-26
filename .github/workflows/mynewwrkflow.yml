@@ -88,9 +88,9 @@ jobs:
           else
             echo "Dynamic inventory not defined in ansible configuration"
             cd /etc/ansible
-            echo '[defaults]' >> ansible.cfg
-            echo 'enable_plugins = aws_ec2' >> ansible.cfg
-            echo 'inventory = /opt/ansible/inventory/aws_ec2.yaml' >> ansible.cfg
+            echo '[defaults]' | sudo tee -a ansible.cfg
+            echo 'enable_plugins = aws_ec2' | sudo tee -a ansible.cfg
+            echo 'inventory = /opt/ansible/inventory/aws_ec2.yaml' | sudo tee -a ansible.cfg
            sudo chmod +x ansible.cfg
            cat /etc/ansible/ansible.cfg
           fi
