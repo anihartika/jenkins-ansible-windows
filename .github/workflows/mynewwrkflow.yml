@@ -67,10 +67,10 @@ jobs:
            else
                 echo "Dynamic inventory needs to be setup"
                 echo "::set-output name=file_exists::false"
-                sudo touch aws_ec2.yaml
+                sudo touch ec2.yaml
                 echo "plugin: aws_ec2" >> aws_ec2.yaml
                 echo "regions:" >> aws_ec2.yaml
-                echo    "- "us-east-2"" >> aws_ec2.yanl
+                echo    "- "us-east-2"" >> aws_ec2.yaml
                 echo "keyed_groups:" >> aws_ec2.yaml
                 echo    "- key: tags.Name" >> aws_ec2.yaml
                 echo "filters:" >> aws_ec2.yaml
