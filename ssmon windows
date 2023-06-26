@@ -1,0 +1,39 @@
+Resolution
+Install SSM Agent to a newly launched instance by adding user data
+1.    Create an AWS Identity and Access Management (IAM) instance profile to use with SSM Agent.
+
+2.    Launch a new Amazon Elastic Compute Cloud (Amazon EC2) instance. Then, configure your instance parameters, such as application and OS images, instance type, key pair, network settings, and storage.
+
+3.    Expand the Advanced Details section, in the IAM Instance Profile dropdown list, select the instance profile that you created in step 1.
+
+4.    In the User data box, enter the following information:
+
+<powershell>
+$dir = $env:TEMP + "\ssm"
+New-Item -ItemType directory -Path $dir -Force
+cd $dir
+(New-Object System.Net.WebClient).DownloadFile("https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/windows_amd64/AmazonSSMAgentSetup.exe", $dir + "\AmazonSSMAgentSetup.exe")
+Start-Process .\AmazonSSMAgentSetup.exe -ArgumentList @("/q", "/log", "install.log") -Wait
+</powershell>
+For more information, see User data and the console.
+
+5.    Enter the number of instances to be launched.
+
+6.    Launch your instances.
+
+For Linux, see How do I install AWS Systems Manager Agent (SSM Agent) on an Amazon EC2 Linux instance at launch?
+
+Activate SSM Agent auto update
+1.    Open the AWS Systems Manager console.
+
+2.    In the navigation pane, choose Fleet Manager.
+
+3.    Choose the Settings tab, and then choose Auto update SSM Agent under Agent auto update.
+
+Note: The Auto update SSM Agent setting applies to all of the managed nodes in the Region where this setting is configured.
+
+4.    Then, configure your SSM Agent fleet:
+
+To change the version of SSM Agent that your fleet updates to, choose Edit under Agent auto update on the Settings tab. Then, enter the version number of SSM Agent you want to update to in Version under Parameters. If not specified, the agent updates to the latest version.
+To change the defined schedule (by default it's set to run every 14 days), choose Edit under Agent auto update on the Settings tab. Then, configure your preferred schedule using the On Schedule option under Specify schedule based on Cron and rate expressions for associations.
+To stop automatically deploying updated versions of SSM Agent to managed nodes in your account, choose Delete under Agent auto update on the Settings tab. This deletes the State Manager association that automatically updates SSM Agent on your managed nodes.
