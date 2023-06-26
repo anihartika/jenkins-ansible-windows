@@ -113,7 +113,6 @@ jobs:
             echo  'ansible_password=${{ secrets.WIN_PASSWORD }}'>> inventory.ini
             echo  'ansible_connection=winrm' >> inventory.ini
             echo  'ansible_winrm_server_cert_validation=ignore' >> inventory.ini
-            echo  'ansible_winrm_transport=ntlm'>> inventory.ini
             echo  'ansible_winrm_port=5986' >> inventory.ini
             #Print inventory
             cat /etc/ansible/inventory.ini
