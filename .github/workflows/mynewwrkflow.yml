@@ -122,3 +122,8 @@ jobs:
       - name: Check connectivity
         run: |
            ansible -i /etc/ansible/inventory.ini -m win_ping win
+           
+      - name: Run Ansible playbook
+        run: |
+           ansible -i /etc/ansible/inventory.ini -m win_ping win
+           ansible-playbook -i /etc/ansible/inventory.ini win
