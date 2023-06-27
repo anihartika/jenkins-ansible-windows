@@ -108,7 +108,7 @@ jobs:
           sudo sh host.sh
           if [ -s "inventory.ini" ]; then
             sudo chmod 777 inventory.ini
-             if grep -q "vars" "inventory.ini"; then
+             if grep -q "[win:vars]" "inventory.ini"; then
                echo "Variable String found in the file"
             #Print inventory
             cat /etc/ansible/inventory.ini
