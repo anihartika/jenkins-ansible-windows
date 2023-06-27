@@ -127,3 +127,7 @@ jobs:
         run: |
            ansible -i /etc/ansible/inventory.ini -m win_ping win
            ansible-playbook -i /etc/ansible/inventory.ini windowsplaybook.yaml
+      - name: Clean up inventory for next associated runs
+        run: |
+          sudo rm /etc/ansible/inventory.ini
+           echo "Inventory file removed"
