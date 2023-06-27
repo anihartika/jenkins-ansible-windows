@@ -1,0 +1,35 @@
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+choco install -y nano
+
+nano Configureremote.ps1
+
+save the file execute powershell
+
+.\Configurerempte.ps1
+
+Check if winrm is configured
+
+winrm enumerate winrm/config/listener
+
+
+
+
+
+********************************************
+# Username and Password
+$username = "worker"
+$password = ConvertTo-SecureString "5[x6+wEAufLP014Ga99h5j8'2R$BBy" -AsPlainText -Force  # Super strong plane text password here (yes this isn't secure at all)
+# Creating the user
+New-LocalUser -Name "$username" -Password $password -FullName "$username" -Description "Test user"
+Add-LocalGroupMember -Group "Administrators" -Member "$username"
+***************************************************************
+
+Other way we can enter manually
+$password = Read-Host -AsSecureString
+New-LocalUser -Name "LazyUser" -Password $password -FullName "Lazy User" -Description "Test user"
+
+
+
+*************************************************
+
