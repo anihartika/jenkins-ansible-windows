@@ -71,7 +71,6 @@ jobs:
                 regions:
                     - "us-east-2"
                 keyed_groups:
-                     - key: tags.Name
                      - key: tags.type
                 filters:
                     instance-state-name : running
