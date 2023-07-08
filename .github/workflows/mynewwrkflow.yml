@@ -72,9 +72,9 @@ jobs:
                     - "us-east-2"
                 keyed_groups:
                      - key: tags.Name
+                     - key: tags.type
                 filters:
                     instance-state-name : running
-                    tag:type: mywin && tag:type: mywin1
                 compose:
                     ansible_host: public_ip_address" | sudo tee -a aws_ec2.yaml
              fi
