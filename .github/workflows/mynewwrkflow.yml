@@ -76,7 +76,6 @@ jobs:
                     instance-state-name : running
                     tag:type:
                        - 'mywin'
-                    or:
                     tag:platform:
                        - 'mywin1'
                 compose:
