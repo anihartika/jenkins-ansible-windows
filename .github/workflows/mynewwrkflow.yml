@@ -75,7 +75,9 @@ jobs:
                      - key: tags.type
                 filters:
                     instance-state-name : running
-                    tag:type: mywin
+                    tag:type:
+                       - 'mywin'
+                       - 'mywin1'
                 compose:
                     ansible_host: public_ip_address" | sudo tee -a aws_ec2.yaml
              fi
@@ -98,7 +100,7 @@ jobs:
            
       - name: Check the dynamic inventory 
         run: |
-           ansible type --list-hosts      
+           ansible all --list-hosts      
    
       #Copy the hostgeneration script to the control node under /etc/ansible
       - name: Generate host file for dynamic inventory and add connection params
