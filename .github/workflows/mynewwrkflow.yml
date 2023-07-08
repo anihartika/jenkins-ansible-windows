@@ -74,9 +74,7 @@ jobs:
                      - key: tags.Name
                 filters:
                     instance-state-name : running
-                    tag:type:
-                       - 'mywin'
-                       - 'mywin1'
+                    'tag:type=mywin&tag:type1=mywin1'
                 compose:
                     ansible_host: public_ip_address" | sudo tee -a aws_ec2.yaml
              fi
