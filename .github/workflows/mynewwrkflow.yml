@@ -133,7 +133,7 @@ jobs:
                     
       - name: Check connectivity
         run: |
-           ansible -i /etc/ansible/hosts win -m win_ping
+           ansible -i /etc/ansible/inventory.ini win -m win_ping
            
       - name: Run Ansible playbook
         run: |
