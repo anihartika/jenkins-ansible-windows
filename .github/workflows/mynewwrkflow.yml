@@ -133,7 +133,7 @@ jobs:
                     
       - name: Check connectivity
         run: |
-           ansible win -m win_ping win
+           ansible win -m win_ping
            
       - name: Run Ansible playbook
         run: |
