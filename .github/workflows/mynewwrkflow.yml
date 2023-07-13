@@ -134,12 +134,12 @@ jobs:
                     
       - name: Check connectivity
         run: |
-           ansible win -m win_ping
+           ansible -i /etc/ansible/hosts win -m win_ping
            
       - name: Run Ansible playbook
         run: |
-           ansible win -m win_ping
-           ansible-playbook -i win windowsplaybook.yaml
+           ansible -i /etc/ansible/hosts win -m win_ping
+           ansible-playbook -i /etc/ansible/hosts win windowsplaybook.yaml
       - name: Clean up inventory for next associated runs
         run: |
           cd /etc/ansible 
