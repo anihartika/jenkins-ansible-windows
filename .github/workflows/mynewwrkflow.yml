@@ -139,7 +139,7 @@ jobs:
       - name: Run Ansible playbook
         run: |
            ansible -i /etc/ansible/hosts win -m win_ping
-           ansible-playbook -i /etc/ansible/hosts win windowsplaybook.yaml
+           ansible-playbook -i /etc/ansible/hosts windowsplaybook.yaml
       - name: Clean up inventory for next associated runs
         run: |
           cd /etc/ansible 
