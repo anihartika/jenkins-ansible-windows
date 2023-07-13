@@ -110,7 +110,7 @@ jobs:
           sudo sh host.sh
           if [ -s "inventory.ini" ]; then
             sudo chmod 777 inventory.ini
-            mkdir /etc/ansible/group_vars
+            sudo mkdir /etc/ansible/group_vars
             sudo chmod -R 777 /etc/ansible/
             cd /etc/ansible/group_vars
             echo "---" >> win.yaml
