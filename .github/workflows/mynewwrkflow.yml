@@ -120,18 +120,19 @@ jobs:
             echo "ansible_winrm_server_cert_validation:ignore" >> win.yaml
             echo "ansible_winrm_port:5986" >> win.yaml
             sudo chmod 777 win.yaml
-            cat /etc/ansible/inventory.ini       
+            cat /etc/ansible/inventory.ini
+            sudo cp /etc/ansible/inventory.ini /etc/ansible/hosts
           else
             echo "No hosts found"
           fi
                     
       - name: Check connectivity
         run: |
-           ansible -i /etc/ansible/inventory.ini -m win_ping win
+           ansible win -m win_ping win
            
       - name: Run Ansible playbook
         run: |
-           ansible -i /etc/ansible/inventory.ini -m win_ping win
+           ansible win -m win_ping win
            ansible-playbook -i /etc/ansible/inventory.ini windowsplaybook.yaml
       - name: Clean up inventory for next associated runs
         run: |
