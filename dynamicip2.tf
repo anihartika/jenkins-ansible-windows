@@ -1,24 +1,26 @@
-resource "aws_instance" "example" {
-  ami           = "ami-xxxxxxxxxxxxxxxxx"
+module "ubuntu_instance" {
+  source = "hashicorp/aws/modules/ec2/instance"
+  ami = "ami-0123456789abcdef0"
   instance_type = "t2.micro"
-  subnet_id     = aws_subnet.example.id
+  associate_public_ip_address = true
 }
 
-resource "aws_security_group" "example" {
-  name_prefix = "example-security-group"
-  description = "Example security group for dynamic IP access"
+output "public_ip" {
+  value = module.ubuntu_instance.public_ip
+}
 
+resource "aws_security_group" "default" {
+  name = "default"
   ingress {
-    description = "Allow SSH from dynamic IP"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [aws_instance.example.public_ip]
+    protocol = "tcp"
+    port = 80
+    cidr_blocks = ["0.0.0.0/0"]
   }
-
-  # Add other ingress and egress rules as needed
 }
 
-output "dynamic_public_ip" {
-  value = aws_instance.example.public_ip
+resource "aws_security_group_rule" "allow_from_public_ip" {
+  security_group_id = aws_security_group.default.id
+  from_port = 80
+  to_port = 80
+  cidr_blocks =  ["${output.public_ip}/32"]
 }
