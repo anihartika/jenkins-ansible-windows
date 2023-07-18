@@ -1,0 +1,25 @@
+resource "aws_security_group" "default" {
+  name = "default"
+  ingress {
+    dynamic "rules" {
+      for_each = var.ingress_rules
+      content {
+        from_port = rules.value.port
+        to_port = rules.value.port
+        protocol = rules.value.protocol
+        cidr_blocks = rules.value.cidr_blocks
+      }
+    }
+  }
+  egress {
+    dynamic "rules" {
+      for_each = var.egress_rules
+      content {
+        from_port = rules.value.port
+        to_port = rules.value.port
+        protocol = rules.value.protocol
+        cidr_blocks = rules.value.cidr_blocks
+      }
+    }
+  }
+}
