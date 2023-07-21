@@ -77,7 +77,7 @@ jobs:
                        - 'mywin'
                        - 'mywin1'
                 compose:
-                    ansible_host: private_ip_address" | sudo tee -a aws_ec2.yaml
+                    ansible_host: public_ip_address" | sudo tee -a aws_ec2.yaml
              fi
                 
       - name: Check Ansible Configuration and set it accordingly
