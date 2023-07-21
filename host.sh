@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ansible-inventory --list|grep -o '"public_ip_address": "[^"]*'|awk -F': "' '{print $2}' > hosts.txt
+ansible-inventory --list|grep -o '"private_ip_address": "[^"]*'|awk -F': "' '{print $2}'|head -1 > hosts.txt
 hosts_file="hosts.txt"
 inventory_file="inventory.ini"
 
