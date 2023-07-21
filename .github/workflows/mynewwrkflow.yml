@@ -122,7 +122,7 @@ jobs:
             echo "ansible_connection: winrm" >> win.yaml
             echo "ansible_winrm_server_cert_validation: ignore" >> win.yaml
             echo "ansible_winrm_port: 5986" >> win.yaml
-            echo  "ansible_winrm_transport: basic" >> win.yaml
+            echo  "ansible_winrm_transport: ntlm" >> win.yaml
             sudo chmod 777 win.yaml
             cat /etc/ansible/inventory.ini
             fi
