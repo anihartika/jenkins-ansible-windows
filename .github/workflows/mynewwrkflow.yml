@@ -75,7 +75,6 @@ jobs:
                     instance-state-name : running
                     tag:type:
                        - 'mywin'
-                       - 'mywin1'
                 compose:
                     ansible_host: private_ip_address" | sudo tee -a aws_ec2.yaml
              fi
