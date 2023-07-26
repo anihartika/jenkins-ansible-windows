@@ -9,7 +9,7 @@ REPO_NAME=jenkins-ansible-windows
 sudo apt update -y
 sudo apt install -y git
 
-# Get a new GitHub token with 'repo' scope using your Personal Access Token (PAT)
+# Get a new GitHub token with 'repo' scope 
 GITHUB_TOKEN=A7J2MFVTMD5TTBWPCSOBGKLEYF636
 
 # Download and configure the GitHub Actions runner
