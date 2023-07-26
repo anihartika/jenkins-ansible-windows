@@ -6,7 +6,7 @@ RUNNER_NAME=myrunner
 LABELS=selfhosted,Linux,X64
 
 # Get a new GitHub token with 'repo' scope using your Personal Access Token (PAT)
-GITHUB_TOKEN=$(curl -X POST -H "Authorization: token mytoken" \
+RUNNER_TOKEN=$(curl -X POST -H "Authorization: token mytoken" \
   -H "Accept: application/vnd.github.v3+json" \
   "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/runners/registration-token" \
   | jq -r '.token')
