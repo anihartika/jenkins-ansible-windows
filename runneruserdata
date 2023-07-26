@@ -3,25 +3,30 @@ sudo -u ubuntu -i <<'EOF'
 REPO_OWNER=azureaws
 REPO_NAME=jenkins-ansible-windows
 RUNNER_NAME=myrunner
-LABELS=selfhosted,Linux,X64
 
-# Get a new GitHub token with 'repo' scope using your Personal Access Token (PAT)
-RUNNER_TOKEN=$(curl -X POST -H "Authorization: token mytoken" \
-  -H "Accept: application/vnd.github.v3+json" \
-  "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/runners/registration-token" \
-  | jq -r '.token')
+
 # Install dependencies
 sudo apt update -y
 sudo apt install -y git
 
+# Get a new GitHub token with 'repo' scope using your Personal Access Token (PAT)
+GITHUB_TOKEN=$(curl -X POST -H "Authorization: token mytokennew" \
+  -H "Accept: application/vnd.github.v3+json" \
+  "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/runners/registration-token" \
+  | grep -r '.token')
+
 # Download and configure the GitHub Actions runner
 mkdir actions-runner && cd actions-runner# Download the latest runner package
-curl -o actions-runner-linux-x64-2.305.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.305.0/actions-runner-linux-x64-2.305.0.tar.gz# Optional: Validate the hash
-echo "737bdcef6287a11672d6a5a752d70a7c96b4934de512b7eb283be6f51a563f2f  actions-runner-linux-x64-2.305.0.tar.gz" | shasum -a 256 -c# Extract the installer
-tar xzf ./actions-runner-linux-x64-2.305.0.tar.gz
+# Optional: Validate the hash
+$ echo "038c9e98b3912c5fd6d0b277f2e4266b2a10accc1ff8ff981b9971a8e76b5441  actions-runner-linux-x64-2.307.1.tar.gz" | shasum -a 256 -c# Extract the installer
+$ tar xzf ./actions-runner-linux-x64-2.307.1.tar.gz
 
 # Configure the runner
-./config.sh --url https://github.com/$REPO_OWNER/$REPO_NAME --token $RUNNER_TOKEN --labels $LABELS --unattended
+./config.sh --url https://github.com/$REPO_OWNER/$REPO_NAME --token $GITHUB_TOKEN --name $RUNNER_NAME --work "_work"
+
+
+# Install dependencies
+./bin/installdependencies.sh
 
 # Start the runner as a service
 sudo ./svc.sh install
