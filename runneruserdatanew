@@ -2,15 +2,25 @@
 sudo -u ubuntu -i <<'EOF'
 REPO_OWNER=azureaws
 REPO_NAME=jenkins-ansible-windows
-RUNNER_NAME=myrunnernew
-
+ACCESS_TOKEN=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
 
 # Install dependencies
 sudo apt update -y
 sudo apt install -y git
 
 # Get a new GitHub token with 'repo' scope 
-GITHUB_TOKEN=A7J2MFVTMD5TTBWPCSOBGKLEYF636
+# GitHub API endpoint to create a repository token
+API_URL="https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/runners/registration-token"
+
+# Request the token from the GitHub API
+RESPONSE=$(curl -X POST -H "Authorization: token $ACCESS_TOKEN" $API_URL)
+
+# Extract the token from the JSON response
+TOKEN=$(echo "$RESPONSE" | grep -oP '(?<="token": ")[^"]*')
+
+# Print the token
+GITHUB_TOKEN=$TOKEN
+echo "Repository-specific runner token: $TOKEN"
 
 # Download and configure the GitHub Actions runner
 mkdir actions-runner && cd actions-runner# Download the latest runner package
@@ -20,7 +30,7 @@ echo "038c9e98b3912c5fd6d0b277f2e4266b2a10accc1ff8ff981b9971a8e76b5441  actions-
 tar xzf ./actions-runner-linux-x64-2.307.1.tar.gz
 
 # Configure the runner
-./config.sh --url https://github.com/$REPO_OWNER/$REPO_NAME --token $GITHUB_TOKEN --name $RUNNER_NAME --work "_work" --unattended
+./config.sh --url https://github.com/$REPO_OWNER/$REPO_NAME --token $GITHUB_TOKEN --work "_work" --unattended
 
 
 # Install dependencies
