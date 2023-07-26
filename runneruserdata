@@ -2,12 +2,17 @@
 sudo -u ubuntu -i <<'EOF'
 REPO_OWNER=azureaws
 REPO_NAME=jenkins-ansible-windows
-RUNNER_TOKEN=A7J2MFVVRRJP23BBE2CGIYDEUXGZ4
+RUNNER_NAME=myrunner
 LABELS=selfhosted,Linux,X64
 
+# Get a new GitHub token with 'repo' scope using your Personal Access Token (PAT)
+GITHUB_TOKEN=$(curl -X POST -H "Authorization: token mytoken" \
+  -H "Accept: application/vnd.github.v3+json" \
+  "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/runners/registration-token" \
+  | jq -r '.token')
 # Install dependencies
-sudo yum update -y
-sudo yum install -y git
+sudo apt update -y
+sudo apt install -y git
 
 # Download and configure the GitHub Actions runner
 mkdir actions-runner && cd actions-runner# Download the latest runner package
