@@ -1,0 +1,35 @@
+#!/bin/bash
+sudo -u ubuntu -i <<'EOF'
+REPO_OWNER=azureaws
+REPO_NAME=jenkins-ansible-windows
+RUNNER_NAME=myrunnernew
+
+
+# Install dependencies
+sudo apt update -y
+sudo apt install -y git
+
+# Get a new GitHub token with 'repo' scope 
+GITHUB_TOKEN=A7J2MFVTMD5TTBWPCSOBGKLEYF636
+
+# Download and configure the GitHub Actions runner
+mkdir actions-runner && cd actions-runner# Download the latest runner package
+curl -o actions-runner-linux-x64-2.307.1.tar.gz -L https://github.com/actions/runner/releases/download/v2.307.1/actions-runner-linux-x64-2.307.1.tar.gz
+# Optional: Validate the hash
+echo "038c9e98b3912c5fd6d0b277f2e4266b2a10accc1ff8ff981b9971a8e76b5441  actions-runner-linux-x64-2.307.1.tar.gz" | shasum -a 256 -c# Extract the installer
+tar xzf ./actions-runner-linux-x64-2.307.1.tar.gz
+
+# Configure the runner
+./config.sh --url https://github.com/$REPO_OWNER/$REPO_NAME --token $GITHUB_TOKEN --name $RUNNER_NAME --work "_work" --unattended
+
+
+# Install dependencies
+./bin/installdependencies.sh
+
+# Start the runner as a service
+sudo ./svc.sh install
+sudo ./svc.sh start
+git clone https://github.com/$REPO_OWNER/$REPO_NAME
+cd $REPO_NAME
+cp host.sh /home/ubuntu
+EOF
