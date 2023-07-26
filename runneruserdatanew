@@ -23,9 +23,6 @@ tar xzf ./actions-runner-linux-x64-2.307.1.tar.gz
 ./config.sh --url https://github.com/$REPO_OWNER/$REPO_NAME --token $GITHUB_TOKEN --work "_work" --unattended
 
 
-# Install dependencies
-./bin/installdependencies.sh
-
 # Start the runner as a service
 sudo ./svc.sh install
 sudo ./svc.sh start
