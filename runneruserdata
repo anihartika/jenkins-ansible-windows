@@ -18,8 +18,8 @@ GITHUB_TOKEN=$(curl -X POST -H "Authorization: token mytokennew" \
 # Download and configure the GitHub Actions runner
 mkdir actions-runner && cd actions-runner# Download the latest runner package
 # Optional: Validate the hash
-$ echo "038c9e98b3912c5fd6d0b277f2e4266b2a10accc1ff8ff981b9971a8e76b5441  actions-runner-linux-x64-2.307.1.tar.gz" | shasum -a 256 -c# Extract the installer
-$ tar xzf ./actions-runner-linux-x64-2.307.1.tar.gz
+echo "038c9e98b3912c5fd6d0b277f2e4266b2a10accc1ff8ff981b9971a8e76b5441  actions-runner-linux-x64-2.307.1.tar.gz" | shasum -a 256 -c# Extract the installer
+tar xzf ./actions-runner-linux-x64-2.307.1.tar.gz
 
 # Configure the runner
 ./config.sh --url https://github.com/$REPO_OWNER/$REPO_NAME --token $GITHUB_TOKEN --name $RUNNER_NAME --work "_work"
