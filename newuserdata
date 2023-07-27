@@ -4,7 +4,6 @@ REPO_OWNER=azureaws
 REPO_NAME=jenkins-ansible-windows
 RUNNER_LABELS="self-hosted,linux,X64" 
 sudo apt update -y
-sudo apt install docker -y
 sudo apt install git -y
 sudo apt install jq -y 
 mkdir actions-runner
