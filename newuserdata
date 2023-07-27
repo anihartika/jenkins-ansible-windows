@@ -17,7 +17,6 @@ RUNNER_TOKEN=$(curl -s -XPOST \
     -H "authorization: token $PAT" \
     https://api.github.com/repos/REPO_OWNER/REPO_NAME/actions/runners/registration-token |\
     jq -r .token)
-sudo chown ubuntu -R /actions-runner
 # Configure the runner
 ./config.sh --url https://github.com/$REPO_OWNER/$REPO_NAME --token $RUNNER_TOKEN --work "_work" --labels RUNNER_LABELS --unattended
 sudo ./svc.sh install
