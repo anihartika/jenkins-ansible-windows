@@ -1,0 +1,24 @@
+<powershell>
+$dir = $env:TEMP + "\ssm"
+New-Item -ItemType directory -Path $dir -Force
+cd $dir
+(New-Object System.Net.WebClient).DownloadFile("https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/windows_amd64/AmazonSSMAgentSetup.exe", $dir + "\AmazonSSMAgentSetup.exe")
+Start-Process .\AmazonSSMAgentSetup.exe -ArgumentList @("/q", "/log", "install.log") -Wait
+
+
+$ScriptURL = "https://raw.githubusercontent.com/azureaws/jenkins-ansible-windows/main/Configuringremote.ps1"
+$DestinationPath = "C:\Configuringremote.ps1"
+
+# Download the script from GitHub
+Invoke-WebRequest -Uri $ScriptURL -OutFile $DestinationPath
+
+# Execute the script
+& $DestinationPath
+winrm enumerate winrm/config/listener
+
+$username = "worker"
+$password = ConvertTo-SecureString "5[x6+wEAufLP014Ga99h5j8'2R$BBy" -AsPlainText -Force  # Super strong plane text password here (yes this isn't secure at all)
+# Creating the user
+New-LocalUser -Name "$username" -Password $password -FullName "$username" -Description "Test user"
+Add-LocalGroupMember -Group "Administrators" -Member "$username"
+</powershell>
