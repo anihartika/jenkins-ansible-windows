@@ -1,0 +1,129 @@
+name: New Ansible Play Updated Windows test for privateip test1
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: self-hosted
+    environment: windows  
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Configure SSH key
+        run: |
+          echo "$SSH_PRIVATE_KEY" > ssh_private_key
+          chmod 600 ssh_private_key
+
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.5.1
+        with:
+          ssh-private-key: |
+            ${{ secrets.SSH_PRIVATE_KEY }}
+     
+      - name: Add Repo Ansible
+        run: |
+          sudo apt-get update && sudo apt-get install software-properties-common -y && sudo apt-add-repository --yes --update ppa:ansible/ansible
+     
+      - name: Check Ansible Installation and install
+        id: check_ansible
+        run: |
+          if ! ansible --version >/dev/null 2>&1; then
+            echo "Ansible is not installed"
+            sudo apt-get update
+            sudo apt-get install -y ansible
+          else
+            echo "Ansible is already installed"
+          fi
+            
+      - name: Install Python
+        run: |
+          if ! command -v python3 &> /dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y python3
+          fi
+          python3 --version
+          
+          
+      - name: Install Python Pip,Boto3 and other dependencies
+        run: |
+           sudo apt-get update && sudo apt-get install python3-pip -y
+           sudo apt-get install python3-winrm -y && sudo sudo pip3 install boto3
+     
+      - name: Set the dynamic inventory 
+        run: |
+           sudo mkdir -p /opt/ansible/inventory
+           cd /opt/ansible/inventory
+           echo "Dynamic inventory setup"
+             echo "---
+                plugin: aws_ec2
+                regions:
+                    - "us-east-2"
+                keyed_groups:
+                     - key: tags.Name
+                filters:
+                    instance-state-name : running
+                    tag:type:
+                       - 'mywin'
+                compose:
+                    ansible_host: private_ip_address" | sudo tee -a aws_ec2.yaml
+                
+      - name: Check Ansible Configuration and set it accordingly
+        id: check_string
+        run: |
+            cd /etc/ansible
+            echo '[defaults]' | sudo tee -a ansible.cfg
+            echo 'enable_plugins = aws_ec2' | sudo tee -a ansible.cfg
+            echo 'inventory = /opt/ansible/inventory/aws_ec2.yaml' | sudo tee -a ansible.cfg
+            sudo chmod +x ansible.cfg
+            cat /etc/ansible/ansible.cfg
+           
+      - name: Check the dynamic inventory 
+        run: |
+           ansible all --list-hosts      
+   
+      #Copy the hostgeneration script to the control node under /etc/ansible
+      - name: Generate host file for dynamic inventory and add connection params
+        run: |
+          sudo cp /home/ubuntu/host.sh /etc/ansible
+          cd /etc/ansible
+          sudo chmod +x host.sh
+          sudo sh host.sh
+          if [ -s "inventory.ini" ]; then
+            sudo chmod 777 inventory.ini
+            echo '[win:vars]'>> inventory.ini
+            echo  'ansible_user=${{ secrets.WIN_USER }}' >> inventory.ini
+            echo  'ansible_password=${{ secrets.WIN_PASSWORD }}'>> inventory.ini
+            echo  'ansible_connection=winrm' >> inventory.ini
+            echo  'ansible_winrm_server_cert_validation=ignore' >> inventory.ini
+            echo  'ansible_winrm_transport=ntlm'>> inventory.ini
+            echo  'ansible_winrm_port=5986' >> inventory.ini
+            #Print inventory
+            cat /etc/ansible/inventory.ini
+          else
+          echo "Inventory file not found"
+          fi
+                    
+      - name: Check connectivity
+        run: |
+           ansible -i /etc/ansible/inventory.ini win -m win_ping
+           
+      - name: Run Ansible playbook
+        run: |
+           ansible -i /etc/ansible/inventory.ini win -m win_ping
+           ansible-playbook -i /etc/ansible/inventory.ini windowsplaybook.yaml
+      - name: Clean up inventory for next associated runs
+        run: |
+          cd /etc/ansible 
+          if [ -f "inventory.ini" ]; then
+          sudo rm /etc/ansible/inventory.ini
+           echo "Inventory file removed"
+          else
+           echo "Inventory file not found/No hosts generated"
+          fi
