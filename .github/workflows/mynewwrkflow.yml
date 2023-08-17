@@ -56,28 +56,10 @@ jobs:
            sudo apt-get update && sudo apt-get install python3-pip -y
            sudo apt-get install python3-winrm -y && sudo sudo pip3 install boto3
      
-      - name: Set the dynamic inventory directory and check inventory file if it exists
+      - name: Set the dynamic inventory by copying the file from repo
         run: |
            sudo mkdir -p /opt/ansible/inventory
-           cd /opt/ansible/inventory
-           if [ -f "aws_ec2.yaml" ]; then
-                echo "Dynamic inventory already setup"
-                echo "::set-output name=file_exists::true"
-           else
-                echo "Dynamic inventory needs to be setup"
-             echo "---
-                plugin: aws_ec2
-                regions:
-                    - "us-east-2"
-                keyed_groups:
-                     - key: tags.Name
-                filters:
-                    instance-state-name : running
-                    tag:type:
-                       - 'mywin'
-                compose:
-                    ansible_host: private_ip_address" | sudo tee -a aws_ec2.yaml
-             fi
+           cp ${{ github.workspace }}/jenkins-ansible-windows/aws_ec2.yaml /opt/ansible/inventory
                 
       - name: Check Ansible Configuration and set it accordingly
         id: check_string
