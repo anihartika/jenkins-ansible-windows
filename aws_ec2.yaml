@@ -6,7 +6,7 @@ keyed_groups:
      - key: tags.Name
 filters:
     instance-state-name : running
-    tag:type:
-          - 'mywin'
+    tag:service:
+          - 'svc_ansible'
 compose:
    ansible_host: private_ip_address
