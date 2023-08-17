@@ -84,7 +84,7 @@ jobs:
       #Copy the hostgeneration script to the control node under /etc/ansible
       - name: Generate host file for dynamic inventory and add connection params
         run: |
-          sudo cp /home/ubuntu/host.sh /etc/ansible
+          sudo cp ${{ github.workspace }}/host.sh /etc/ansible
           cd /etc/ansible
           sudo chmod +x host.sh
           sudo sh host.sh
