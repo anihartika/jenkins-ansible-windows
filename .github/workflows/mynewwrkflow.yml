@@ -59,7 +59,7 @@ jobs:
       - name: Set the dynamic inventory by copying the file from repo
         run: |
            sudo mkdir -p /opt/ansible/inventory
-           cp ${{ github.workspace }}/aws_ec2.yaml /opt/ansible/inventory
+           sudo cp ${{ github.workspace }}/aws_ec2.yaml /opt/ansible/inventory
                 
       - name: Check Ansible Configuration and set it accordingly
         id: check_string
