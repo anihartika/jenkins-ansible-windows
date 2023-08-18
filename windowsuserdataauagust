@@ -21,4 +21,5 @@ $password = ConvertTo-SecureString "5[x6+wEAufLP014Ga99h5j8'2R$BBy" -AsPlainText
 # Creating the user
 New-LocalUser -Name "$username" -Password $password -FullName "$username" -Description "Test user"
 Add-LocalGroupMember -Group "Administrators" -Member "$username"
+Get-LocalUser -Name "$username"
 </powershell>
