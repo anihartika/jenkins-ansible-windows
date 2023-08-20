@@ -1,0 +1,7 @@
+$env:WINUSER="worker"
+$env:WINPASS="5[x6+wEAufLP014Ga99h5j8'2R$BBy"
+$env:DESCRIPTION="Admin user"
+$SecurePass=ConvertTo-SecureString $env:WINPASS -AsPlainText -Force
+New-LocalUser -Name "$env:WINUSER" -Password $SecurePass -Description "$env:DESCRIPTION Admin User"
+Add-LocalGroupMember -Group "Administrators" -Member "$env:WINUSER"
+Get-LocalUser -Name "$env:WINUSER"
