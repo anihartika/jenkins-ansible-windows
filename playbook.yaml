@@ -1,12 +1,23 @@
 ---
-- hosts: winnew
-  gather_facts: no
+- name: Install Google Chrome
+  hosts: all
+  become: false
+  gather_facts: false
   tasks:
-    - name: test powershell
-      win_shell: |
-                get-host
-      register: result_get_host
+    - name: Download the Apache Installer
+      win_get_url: 
+        url: https://archive.apache.org/dist/httpd/binaries/win32/httpd-2.2.25-win32-x86-no_ssl.msi
+        dest: C:\httpd-2.2.25-win32-x86-no_ssl.msi
+    -name: Install MSI
+     win_package:
+       path: C:\httpd-2.2.25-win32-x86-no_ssl.msi
+       state: present
 
-    - name: display result_get_host
-      debug:
-        var: result_get_host
+    - name: Install Google Chrome
+      win_chocolatey:
+        name: googlechrome
+        state: present
+    - name: Download Notepad++
+      win-get_url:
+        url: https://sourceforge.net/projects/notepadmsi/files/v7.9.1/Notepad%2B%2B7_9_1.msi
+        dest: C:\Notepad%2B%2B7_9_1.msi
