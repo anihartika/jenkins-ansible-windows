@@ -9,7 +9,7 @@
         url: https://archive.apache.org/dist/httpd/binaries/win32/httpd-2.2.25-win32-x86-no_ssl.msi
         dest: C:\httpd-2.2.25-win32-x86-no_ssl.msi
     - name: Install MSI
-     win_package:
+      win_package:
        path: C:\httpd-2.2.25-win32-x86-no_ssl.msi
        state: present
 
