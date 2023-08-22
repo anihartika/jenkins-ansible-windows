@@ -1,0 +1,13 @@
+#check apache installed
+$apacheInstalled = Test-Path "C:\httpd-2.2.25-win32-x86-no_ssl.msi"
+
+#Check if Google Chrome is installed
+$chromeInstalled = Get-Command "C:\Program Files\Google\Chrome\Application\chrome.exe" -ErrorAction SilentlyContinue
+
+# Check if Notepad++ is installed
+$notepadInstalled = Test-Path "C:\Notepad++7_9_1.msi"
+
+#Output the results
+Write-Host "Apache Installed: $apacheInstalled"
+Write-Host "Google Chrome Installed: $($chromeInstalled -ne $null)"
+Write-Host "Notepad++ Installed: $notepadInstalled"
