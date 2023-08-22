@@ -120,11 +120,6 @@ jobs:
            ansible -i /etc/ansible/inventory.ini win -m win_ping
            ansible-playbook -i /etc/ansible/inventory.ini playbook.yaml
 
-      - name: Test if the playbook run is successful
-        shell: powershell
-        run: |
-         Copy-Item -Path $env:GITHUB_WORKSPACE\script.ps1 -Destination $env:USERPROFILE\script.ps1
-         Invoke-Expression -Command "$env:USERPROFILE\script.ps1"
       
       - name: Clean up inventory for next associated runs
         run: |
