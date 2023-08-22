@@ -18,6 +18,6 @@
         name: googlechrome
         state: present
     - name: Download Notepad++
-      win-get_url:
+      win_get_url:
         url: https://sourceforge.net/projects/notepadmsi/files/v7.9.1/Notepad%2B%2B7_9_1.msi
         dest: C:\Notepad%2B%2B7_9_1.msi
