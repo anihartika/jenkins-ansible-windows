@@ -118,7 +118,7 @@ jobs:
       - name: Run Ansible playbook
         run: |
            ansible -i /etc/ansible/inventory.ini win -m win_ping
-           ansible-playbook -i /etc/ansible/inventory.ini windowsplaybook.yaml
+           ansible-playbook -i /etc/ansible/inventory.ini playbook.yaml
       - name: Clean up inventory for next associated runs
         run: |
           cd /etc/ansible 
