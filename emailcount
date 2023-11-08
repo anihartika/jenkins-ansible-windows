@@ -1,0 +1,10 @@
+$logPath = "C:\Program Files\Microsoft\Exchange Server\V15\TransportRoles\Logs\MessageTracking"
+$today = Get-Date
+
+$logs = Get-ChildItem -Path $logPath -Recurse | Where-Object { $_.LastWriteTime.Date -eq $today.Date }
+
+$emailCount = $logs | ForEach-Object {
+    Get-Content $_.FullName | Where-Object { $_ -match "RECEIVE" } | Measure-Object | Select-Object -ExpandProperty Count
+}
+
+"Emails received today ($($today.ToString('MM/dd/yyyy'))): $emailCount"
