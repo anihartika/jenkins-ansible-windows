@@ -1,0 +1,16 @@
+$logPath = "C:\Windows\System32\LogFiles\SMTPSVC1"
+$desiredDate = Get-Date -Year 2023 -Month 11 -Day 5
+
+# Format the desired date as YYYYMMDD
+$desiredDateFormatted = $desiredDate.ToString('yyyyMMdd')
+
+# Search for the log file with the desired date in the name
+$logFiles = Get-ChildItem -Path $logPath | Where-Object { $_.Name -like "SMTPSVC1-$desiredDateFormatted.log" }
+
+$emailCount = 0
+
+if ($logFiles.Count -eq 1) {
+    $emailCount = (Get-Content $logFiles[0]).Count
+}
+
+"Emails relayed on $($desiredDate.ToString('MM/dd/yyyy')): $emailCount"
