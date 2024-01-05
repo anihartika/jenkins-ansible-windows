@@ -1,0 +1,286 @@
+pipeline {
+    agent any
+    tools {
+        maven 'Maven 3.9.6'
+        jdk 'JDK17'
+    }
+    environment {
+        BASE_VERSION_FILE = 'baseversion.txt'
+        BUILD_VERSION_FILE = 'buildversion.txt'
+        BUILD_NUMBER_FILE = "${WORKSPACE}/buildNumber.txt"
+        POM_VERSION_DEV_FILE = "${WORKSPACE}/pomVersionDev.txt"
+        POM_VERSION_SIT_FILE = "${WORKSPACE}/pomVersionSit.txt"
+    }
+
+    stages {
+        stage('Maven Build') {
+            steps {
+                script {
+                    withCredentials([
+                        usernamePassword(credentialsId: 'deploy_9334', passwordVariable: 'REPO_PWD', usernameVariable: 'REPO_USER')
+                    ]) {
+                        sh '''            
+                            echo "maven build"
+                            ls -la
+                        '''
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        echo "Maven Build failed. Stopping the pipeline."
+                        currentBuild.result = 'FAILURE'
+                        error "Maven Build failed"
+                    }
+                }
+            }
+        }
+
+        stage('Initialize and Increment Version') {
+            steps {
+                script {
+                    // Read the version from pom.xml
+                    def pomVersion = sh(script: 'xmllint --xpath "//*[local-name()=\'project\']/*[local-name()=\'version\']/text()" pom.xml', returnStdout: true).trim()
+                    echo "POM version: ${pomVersion}"
+
+                    // Check if the base version file exists
+                    def baseVersionFile = "${WORKSPACE}/${BASE_VERSION_FILE}"
+                    
+                    // Read the branch parameter
+                    def branchParameter = params.BRANCH
+                    def pomXmlContentDev = sh(script: "git show origin/develop:pom.xml", returnStdout: true).trim()
+
+                    // Extract version from pom.xml using grep and cut
+                    def pomVersionDev = sh(script: "echo '${pomXmlContentDev}' | grep -o '<version>.*</version>' | cut -d'>' -f2 | cut -d'<' -f1 | sed -n 2p", returnStdout: true).trim()
+                    echo "POM Version develop: ${pomVersionDev}"
+                  
+                    // Initialize base version
+                    def baseVersion = fileExists(baseVersionFile) ? readFile(baseVersionFile).trim() : (branchParameter == 'develop' && pomVersion == '1.1.0.1') ? '1.1.0.1' : (branchParameter == 'testsit-1' && pomVersionDev == pomVersion) ? pomVersion : null
+
+                    // Validate and update base version
+                    if (baseVersion == null) {
+                        error "Invalid state. Pom.xml needs to be updated accordingly or Baseversion not updated Please run initialbuild accordingly by updating pom.xml.Stopping the pipeline."
+                    } else {
+                        echo "Base version: ${baseVersion.replaceAll('-SNAPSHOT', '')}"
+                    }
+
+                    // Increment the version based on the release type
+                    def newVersion
+                    def pomVersionSit
+                    def releaseType = params.releaseType
+                    echo "Release type is: ${releaseType}"
+
+                    // Get the branch name from the choice parameter
+                    def branchName = params.BRANCH
+                    echo "Branch is: ${branchName}"
+                    if (branchName == 'testsit-1') {
+                    def pomXmlContentSit = sh(script: "git show origin/testsit-1:pom.xml", returnStdout: true).trim()
+                    // Extract version from pom.xml using grep and cut
+                    pomVersionSit = sh(script: "echo '${pomXmlContentSit}' | grep -o '<version>.*</version>' | cut -d'>' -f2 | cut -d'<' -f1 | sed -n 2p", returnStdout: true).trim()
+                    echo "POM Version SIT: ${pomVersionSit}"
+                    }
+                 
+
+                    // Split the version string using dot as a delimiter
+                    def (preMajor, preMinor, prePatch, present2Build) = pomVersion.split('\\.')
+                    def (inibaseMajor, inibaseMinor, inibasePatch, inibaseBuild) = baseVersion.split('\\.')
+                    if (releaseType == 'initialbuild') {
+                    // Get the previous build result
+                        def previousBuildResult = currentBuild.previousBuild?.result
+
+                        // Check if the previous build was successful
+                        if (previousBuildResult == 'SUCCESS') {
+                            echo "Skipping initialization for 'initialbuild' since the previous build was successful."
+                            return // Skip the rest of the stage
+                        }
+                    }
+
+                    def devSitSyncSuccess = false
+                    if (releaseType == 'initialbuild' && branchName == 'develop' && (baseVersion == pomVersion && pomVersion == '1.1.0.1')) {  
+                        
+                        newVersion = "${preMajor}.${preMinor}.${prePatch}.${present2Build}"
+                        echo "New version: ${newVersion}"
+                    } else if (releaseType == 'initialbuild' && branchName == 'testsit-1' && baseVersion == pomVersion && pomVersionDev == baseVersion) { 
+                        newVersion = "${preMajor}.${preMinor}.${prePatch}.${present2Build}"
+                        echo "New version: ${newVersion}"
+                    } else if (releaseType == 'devsitversionsync' && branchName == 'testsit-1' &&  pomVersionDev == pomVersionSit && baseVersion != null && pomVersionSit > baseVersion && !devSitSyncSuccess) { 
+                        newVersion = "${preMajor}.${preMinor}.${prePatch}.${present2Build}"
+                        echo "New version: ${newVersion}"
+                    } else if (releaseType == 'build') {   
+                        // Parse major, minor, patch, and build numbers from the base version
+                        def baseMajor = inibaseMajor.toInteger()
+                        def baseMinor = inibaseMinor.toInteger()
+                        def basePatch = inibasePatch.toInteger()
+                        def baseBuild = inibaseBuild.toInteger()
+                        def buildNumber = fileExists(BUILD_NUMBER_FILE) ? readFile(BUILD_NUMBER_FILE).trim() : inibaseBuild
+
+                        // Parse major, minor, patch, and build numbers from the current version
+                        def currentMajor = preMajor.toInteger()
+                        def currentMinor = preMinor.toInteger()
+                        def currentPatch = prePatch.toInteger()
+                        def currentBuild = present2Build.toInteger()
+
+                        if ((currentMajor > baseMajor || currentMinor > baseMinor || currentPatch > basePatch) && present2Build.toInteger() == 1) {
+                            buildNumber = '1'
+                            newVersion = "${currentMajor}.${currentMinor}.${currentPatch}"
+                            echo "New version: ${newVersion}"
+                        } else if (currentMajor == baseMajor && currentMinor == baseMinor && currentPatch == basePatch && present2Build.toInteger() == inibaseBuild.toInteger() + 1) {
+                            // Increment the build number
+                            buildNumber = (baseBuild + 1).toString()
+                            newVersion = "${currentMajor}.${currentMinor}.${currentPatch}"
+                            echo "New version: ${newVersion}"
+                        } else {
+                            // Reject the build
+                            error "Build rejected: Current version is less than the base version"
+                        }
+
+                        // Set the build number in the environment
+                        env.BUILD_NUMBER = buildNumber
+                        echo "Build number: ${buildNumber}"
+
+                        // Append build number to the current version for 'build' release type
+                        newVersion = "${newVersion}.${env.BUILD_NUMBER}"
+                        echo "New version: ${newVersion}"
+
+                        // Write the updated build number to the file
+                        writeFile file: BUILD_NUMBER_FILE, text: buildNumber
+                    } else {
+                        error "Invalid release type or mismatch with the base version. Stopping the pipeline."
+                    }
+
+                    // Set the base version in the environment
+                    env.BASE_VERSION = newVersion
+                    echo "Base version: ${baseVersion}"
+
+                    // Write newVersion to build_version.txt
+                    def buildVersionFile = "${WORKSPACE}/build_version.txt"
+                    writeFile file: buildVersionFile, text: newVersion
+                    writeFile file: baseVersionFile, text: newVersion
+                    echo "New version written to ${buildVersionFile}"
+
+                    // Set a variable to indicate whether the initialization was successful
+                    def initializationSuccessful = true
+
+                    // Add additional logic if needed to determine if the initialization was successful
+
+                    // Mark the build as failed if the initialization was not successful
+                    if (!initializationSuccessful) {
+                        error "Initialization failed. Stopping the pipeline."
+                        currentBuild.result = 'FAILURE'
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        echo "Initialize and Increment Version failed. Stopping the pipeline."
+                        currentBuild.result = 'FAILURE'
+                        error "Initialize and Increment Version failed"
+                    }
+                }
+            }
+        }
+        stage('Docker Build') {
+            steps {
+                script {
+                      if (releaseType == 'initialbuild') {
+                        // Get the previous build result
+                        def previousBuildResult = currentBuild.previousBuild?.result
+        
+                        // Check if the previous build was successful
+                        if (previousBuildResult == 'SUCCESS') {
+                            echo "Skipping Docker build for 'initialbuild' since the previous build was successful."
+                            return // Skip the rest of the stage
+                        }
+                    }
+                    def isPodmanBuildNeeded = fileExists("${WORKSPACE}/Dockerfile")
+                    def newVersion = readFile("${WORKSPACE}/build_version.txt")
+                    // Get the branch name from the choice parameter
+                    def branchName = params.BRANCH
+                    echo "Branch is: ${branchName}"
+                    // Define MODULE based on your requirements
+                    def MODULE = params.Module
+                    echo "Module is: ${MODULE}"
+
+                    // Append "-SNAPSHOT" or "-RELEASE" based on the branch
+                    if (branchName == 'develop') {
+                        newVersion1 = "${newVersion}-SNAPSHOT"
+                        DOCKER_IMAGE_FOLDER = 'snapshot'
+                    } else if (branchName == 'testsit-1') {
+                        newVersion1 = "${newVersion}-RELEASE"
+                        DOCKER_IMAGE_FOLDER = 'release'
+                    }
+
+                    // Update DOCKER_IMAGE_NAME based on the branch, MODULE, and DOCKER_IMAGE_FOLDER
+                    def DOCKER_IMAGE_NAME = "artifactory.usps.gov/eir-9334-docker/usps/${MODULE}/${DOCKER_IMAGE_FOLDER}"
+                    echo "Using the new version in Docker Build stage: ${newVersion1}"
+                    
+                    catchError(buildResult: 'FAILURE') {
+                        if (isPodmanBuildNeeded) {
+                             echo "Building Docker image with Podman..."
+                        echo "DOCKER_IMAGE_NAME: ${DOCKER_IMAGE_NAME}"
+                        // Set environment variables for proxy and temporary directory
+                        withCredentials([usernamePassword(credentialsId: 'deploy_artifactory_9334', passwordVariable: 'ART_PASS', usernameVariable: 'ART_USER')]) {
+                            withEnv(['HTTPS_PROXY=proxy.usps.gov:8080', "TMPDIR=${WORKSPACE}"]) {
+                                echo " "
+                                echo "##########################################################################"
+                                echo "Check images before"
+                                echo "##########################################################################"
+                                sh 'podman images'
+
+                                echo " "
+                                echo "##########################################################################"
+                                echo "Login to Artifactory"
+                                echo "##########################################################################"
+                                sh "podman login -u $ART_USER -p $ART_PASS artifactory.usps.gov"
+
+                                echo " "
+                                echo "##########################################################################"
+                                echo "Build image"
+                                echo "##########################################################################"
+                                sh "podman build -t ${MODULE} . --format docker"
+
+                                echo " "
+                                echo "##########################################################################"
+                                echo "Tag image"
+                                echo "##########################################################################"
+                                sh "podman tag ${MODULE} ${DOCKER_IMAGE_NAME}:${newVersion1}"
+
+                                echo " "
+                                echo "##########################################################################"
+                                echo "Push image"
+                                echo "##########################################################################"
+                                sh "podman push -f v2s2 ${DOCKER_IMAGE_NAME}:${newVersion1} --format v2s2"
+
+                                echo " "
+                                echo "##########################################################################"
+                                echo "Logout from Artifactory"
+                                echo "##########################################################################"
+                                sh 'podman logout --all'
+
+                                echo " "
+                                echo "##########################################################################"
+                                echo "Images after"
+                                echo "##########################################################################"
+                                sh 'podman images'
+                            }
+                        }
+                    } else {
+                            echo "No Docker build needed as Dockerfile or source files haven't changed."
+                        }
+                    }
+                }
+            }
+             post {
+                failure {
+                    script {
+                        echo "Docker Build failed. Stopping the pipeline."
+                        currentBuild.result = 'FAILURE'
+                        error "Docker Build failed"
+                    }
+                }
+            }
+        }
+    }
+}
