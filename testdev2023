@@ -40,6 +40,9 @@ pipeline {
         stage('Initialize and Increment Version') {
             steps {
                 script {
+                    def MODULE = params.Module
+                    echo "Module is: ${MODULE}"
+                    cd ${MODULE}
                     // Read the version from pom.xml
                     def pomVersion = sh(script: 'xmllint --xpath "//*[local-name()=\'project\']/*[local-name()=\'version\']/text()" pom.xml', returnStdout: true).trim()
                     echo "POM version: ${pomVersion}"
