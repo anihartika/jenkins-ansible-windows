@@ -52,7 +52,7 @@ pipeline {
                     
                     // Read the branch parameter
                     def branchParameter = params.BRANCH
-                    def pomXmlContentDev = sh(script: "git show origin/develop:pom.xml", returnStdout: true).trim()
+                    def pomXmlContentDev = sh(script: "git show origin/develop:${MODULE}/pom.xml", returnStdout: true).trim()
 
                     // Extract version from pom.xml using grep and cut
                     def pomVersionDev = sh(script: "echo '${pomXmlContentDev}' | grep -o '<version>.*</version>' | cut -d'>' -f2 | cut -d'<' -f1 | sed -n 2p", returnStdout: true).trim()
@@ -78,7 +78,7 @@ pipeline {
                     def branchName = params.BRANCH
                     echo "Branch is: ${branchName}"
                     if (branchName == 'testsit-1') {
-                    def pomXmlContentSit = sh(script: "git show origin/testsit-1:pom.xml", returnStdout: true).trim()
+                    def pomXmlContentSit = sh(script: "git show origin/testsit-1:${MODULE}/pom.xml", returnStdout: true).trim()
                     // Extract version from pom.xml using grep and cut
                     pomVersionSit = sh(script: "echo '${pomXmlContentSit}' | grep -o '<version>.*</version>' | cut -d'>' -f2 | cut -d'<' -f1 | sed -n 2p", returnStdout: true).trim()
                     echo "POM Version SIT: ${pomVersionSit}"
