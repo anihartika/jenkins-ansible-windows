@@ -42,7 +42,7 @@ pipeline {
                 script {
                     def MODULE = params.Module
                     echo "Module is: ${MODULE}"
-                    cd ${MODULE}
+                    dir("${MODULE}") {
                     // Read the version from pom.xml
                     def pomVersion = sh(script: 'xmllint --xpath "//*[local-name()=\'project\']/*[local-name()=\'version\']/text()" pom.xml', returnStdout: true).trim()
                     echo "POM version: ${pomVersion}"
@@ -83,8 +83,7 @@ pipeline {
                     pomVersionSit = sh(script: "echo '${pomXmlContentSit}' | grep -o '<version>.*</version>' | cut -d'>' -f2 | cut -d'<' -f1 | sed -n 2p", returnStdout: true).trim()
                     echo "POM Version SIT: ${pomVersionSit}"
                     }
-                 
-
+                    }
                     // Split the version string using dot as a delimiter
                     def (preMajor, preMinor, prePatch, present2Build) = pomVersion.split('\\.')
                     def (inibaseMajor, inibaseMinor, inibasePatch, inibaseBuild) = baseVersion.split('\\.')
