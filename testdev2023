@@ -19,10 +19,14 @@ pipeline {
                     withCredentials([
                         usernamePassword(credentialsId: 'deploy_9334', passwordVariable: 'REPO_PWD', usernameVariable: 'REPO_USER')
                     ]) {
+                        def MODULE = params.Module
+                        echo "Module is: ${MODULE}"
+                        dir("${MODULE}") {
                         sh '''            
                             echo "maven build"
                             ls -la
                         '''
+                        }
                     }
                 }
             }
