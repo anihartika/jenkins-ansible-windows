@@ -1,0 +1,31 @@
+Below are the workarounds I found for the respective errors 
+
+DBT-06208:password you specified for SYS, SYSTEM or PDBADMIN does not comply with the recommended password complexity, you can either use a stronger one or just ignore it.
+
+the error might be thrown during database creation in silent mode.
+
+So we cna ignore this error 
+
+Next ORA-27104 and ORA-01034:
+
+ workaround found which we can try
+ https://buckenhofer.com/2017/09/dbca-causes-ora-27104/
+
+
+ DBCA fails with error message ORA-27104 on Linux
+
+[ 2017-09-03 20:49:06.137 CEST ] Creating and starting Oracle instance
+DBCA_PROGRESS : 1%
+DBCA_PROGRESS : 2%
+[ 2017-09-03 20:49:07.366 CEST ] ORA-27104: system-defined limits for shared memory was misconfigured
+DBCA_PROGRESS : 3%
+[ 2017-09-03 20:49:07.372 CEST ] ORA-01034: ORACLE not available
+[ 2017-09-03 20:49:07.373 CEST ] ORA-01034: ORACLE not available
+[ 2017-09-03 20:49:11.486 CEST ] DBCA_PROGRESS : DBCA Operation failed.
+
+Kernel parameter shmall is set to 2097152 as documented in http://docs.oracle.com/cloud/latest/db112/LADBI/pre_install.htm#LADBI1187
+Oracle Support Web mentions document Doc ID 1922934.1 with Bug 14202016 (LNX64-12.1-BC:DBCA FAILED TO CREATE POLICY DB DUE TO ORA-27104). A one-off patch can be demanded or as a workaround shmall can be increased to 9272480:
+The following command sets the change immediately
+sysctl -w kernel.shmall=9272480
+Additionally, it is necessary to make the changes persistent in files like /etc/sysctl.conf (or better in a separate file that is also loaded during reboot) with an entry
+kernel.shmall=9272480
