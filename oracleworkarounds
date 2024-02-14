@@ -1,0 +1,30 @@
+Tried all the possible workarounds as per the recommendations but none of them working 
+
+Increased shmax and shmall to diffrent recommendations
+
+https://community.unix.com/t/shmem-problem-installing-oracle-12-c-on-ubuntu-18-04/373854
+
+https://altarmoss.wordpress.com/2016/01/14/oraclesystem-defined-limits-for-shared-memery-was-misconfiguration/
+
+https://www.cnblogs.com/wwjd365/p/9687377.html
+
+https://buckenhofer.com/2017/09/dbca-causes-ora-27104/
+
+One possibility can we increase the RAM to 25GB and try below recommendations for shmall as below
+
+[root@WWJD01 ~]# free -m
+total used free shared buffers cached
+Mem: 258012 87100 170912 78214 225 79199
+-/+ buffers/cache: 7675 250337
+Swap: 65535 0 65535
+```
+```
+kernel.shmall = 258012*1024/4=66051072
+kernel.shmmax = 258012*1024*1024*0.6=162327114547.2
+
+
+For 32GB RAM 
+Example values for x86_64 Server with 32GB RAM:
+shmmax=16833714176, shmall=3287834
+
+Current configured values are too high with the avaiable RAM
